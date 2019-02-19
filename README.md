@@ -28,6 +28,7 @@ That's been the issue! Everything I've found in the relm of sequence to sequence
 I'm publishing the dataset parsing and creation tools now to prove that I am (to my knowledge) the first one to write a parsing script capable of converting competative debate evidence into CoNNEL 2003 / Seq2Seq friendly data types. In theory, any Seq2Seq or PoS tagging model that accepts one of those formats can utilize this dataset. I will write a quick tutorial on how to gather these dataset files yourself: 
 
 *Step 1: Download all open evidence files from 2013-2017 ( https://openev.debatecoaches.org/ ) and unzip them into a directory
+
 *Step 2: Convert all evidence from docx files to html5 files using pandoc with this command: 
 ```
 for f in *.docx; do pandoc "$f" -s -o "${f%.docx}.html5"; done
