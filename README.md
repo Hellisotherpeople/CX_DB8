@@ -14,7 +14,7 @@ I finally got fed up with trying to experiment with supervised summarization sys
 
 Also, high school debators are really quite bad at properly summarizing debate documents. Garbage in - Garbage out when it came to Supervised Learning methods. 
 
-So, I enlist the help of the wikipedia pre-trained Universal Sentence Encoder to be the (to my knowledge) **worlds first contextual token-level extractive summarizer.**
+So, I enlist the help of the wikipedia pre-trained Universal Sentence Encoder to create the (to my knowledge) **worlds first contextual token-level extractive summarizer.**
 
 
 It works by first computing the "meaning" of the card tag, which can be anything. Then, it goes through every word in the actual card. Now, here, I could just compute the meaning of the individual word like "The" = 0.11 and "Person" = 0.12, but that doesn't include the context of the other words around it. 
