@@ -10,7 +10,7 @@ Parsing code for a novel dataset designed for usage in the field of NLP &
 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
 
-I finally got fed up with trying to experiment with supervised summarization systems. Thanks to the magical folks at Google for creating the unsupervised ["Universal Sentence Encoder"] which is more rightly called the "Universal Text Encoder" given how smoothly it works on Words, Sentences, or even whole Documents. 
+I finally got fed up with trying to experiment with supervised summarization systems. Thanks to the magical folks at Google for creating the unsupervised ["Universal Sentence Encoder"](https://tfhub.dev/google/universal-sentence-encoder/2) which is more rightly called the "Universal Text Encoder" given how smoothly it works on Words, Sentences, or even whole Documents. 
 
 Also, high school debators are really quite bad at properly summarizing debate documents. Garbage in - Garbage out when it came to Supervised Learning methods. 
 
