@@ -10,7 +10,9 @@ Parsing code for a novel dataset designed for usage in the field of NLP &
 ## UPDATE 3/30/2019
 **Created a Flair version and adding other features**
 
+*Card tag given: "Humanity is an abstraction" 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
+
 
 I finally got fed up with trying to experiment with supervised summarization systems. Thanks to the magical folks at Google for creating the unsupervised ["Universal Sentence Encoder"](https://tfhub.dev/google/universal-sentence-encoder/2) which is more rightly called the "Universal Text Encoder" given how smoothly it works on Words, Sentences, or even whole Documents. 
 
