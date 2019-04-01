@@ -9,6 +9,15 @@ Parsing code for a novel dataset designed for usage in the field of NLP &
 
 ## UPDATE 3/30/2019
 
+Hello all. I am actively working on this project. For now, I'm working on 3 things 
+
+1. The speed of inference. I assume most debaters will not have access to a GPU or the inclination to get PyTorch to play nice with their own GPU. This means that by default, my summarizer will use embeddings that are fast, but maybe slightly less effective at understanding semantic meaning (like, 1-2 % worse). The default settings that this code is uploaded with should allow for extremely fast (~1 sec) summarization of a large piece of evidence. If you want the extra 1-2 %, you can experiment with big contextual models like BERT and ELMO, rather than use the default FastText + ExtVec vectors. 
+
+2. The word document creation - I'm imagining a program that runs in a loop, asking for the user to give it cards (or go through a word doc or folder), so that it can summarize N documents per run instead of one at a time. I'd also like it to support things like Verbatim formats (I want it to highlight, AND emphasize) instead of my crappy underline or bold underline method avalible at present. 
+
+3. Windows support - Honestly I'm going to need some evidence that people are actually trying to use this before I focus on it. For now main functionality comes first. 
+
+
 **Card tag given: "Humanity is an abstraction".**
 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
