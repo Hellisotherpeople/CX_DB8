@@ -15,6 +15,8 @@ Hello all. I am actively working on this project. For now, I'm working on 3 thin
 
 2. The word document creation - I'm imagining a program that runs in a loop, asking for the user to give it cards (or go through a word doc or folder), so that it can summarize N documents per run instead of one at a time. I'd also like it to support things like Verbatim formats (I want it to highlight, AND emphasize) instead of my crappy underline or bold underline method avalible at present. 
 
+3. Exposing paramaters to the user: It's super easy to change what proportion of the document is underlined or highlighted, and what sets of vector embeddings are used. Right now, it defaults to underlining 75% of the document and highlighting 25% of the document - yet sometimes a team needs different proportions of each. 
+
 3. Documentation - I'm bad at this and it's a low priority for me while I try to get the actual tool working. 
 
 4. Windows support - Honestly I'm going to need some evidence that people are actually trying to use this before I focus on it. For now main functionality comes first. 
