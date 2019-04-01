@@ -9,7 +9,8 @@ Parsing code for a novel dataset designed for usage in the field of NLP &
 
 ## UPDATE 3/30/2019
 
-**Card tag given: "Humanity is an abstraction" **
+**Card tag given: "Humanity is an abstraction".**
+
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
 
 
