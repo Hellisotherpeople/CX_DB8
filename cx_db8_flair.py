@@ -10,8 +10,8 @@ from sklearn.metrics import jaccard_similarity_score
 from docx import Document 
 import sys
 import numpy as np
-
-
+from itertools import islice
+from collections import deque
 
 
 
@@ -40,9 +40,9 @@ stacked_embeddings = DocumentPoolEmbeddings([
                                         #WordEmbeddings('glove'),
                                         WordEmbeddings('extvec'),#ELMoEmbeddings('original'),
                                         #BertEmbeddings('bert-base-cased'),
-                                        FlairEmbeddings('news-forward-fast'),
-                                        FlairEmbeddings('news-backward-fast'), 
-                                       ])#, mode='max')
+                                        #FlairEmbeddings('news-forward-fast'),
+                                        #FlairEmbeddings('news-backward-fast'),
+                                        ]) #, mode='max')
 
 def set_card():
     print("Input the Card Text, press Ctrl-D to end text entry")
@@ -57,24 +57,49 @@ def set_card():
         card_tag = Sentence(str(card_tag))
     return card, card_tag, tag_str
 
+def window(seq, n):
+    "Returns a sliding window (of width n) over data from the iterable"
+    "   s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   "
+    it = iter(seq)
+    result = tuple(islice(it, n))
+    if len(result) == n:
+        yield result
+    for elem in it:
+        result = result[1:] + (elem,)
+        yield result
 
 def create_ngram(num_context, card, card_tag):
     #card = set_card()
     card_words_org = card.split()
     ngram_list = []
+    #print(len(card_words_org))
+    
     for i in range(0, len(card_words_org)):
-        if i > num_context:
+        #print(i)
+        '''
+        if i >= len(card_words_org) - (num_context):
+            new_word = card_words_org[i-num_context:i]
+        elif i >= num_context:
             new_word = card_words_org[i-num_context:i+num_context]
         else:
-            new_word = card_words_org[i:i+num_context] #make it so that each word takes it's prior words as context as well
+            new_word = card_words_org[i:i+num_context] #make it so that each word takes it's prior words as context as well 
+        '''
+        
+        new_m = card_words_org[i:i]
+        new_l = card_words_org[i-num_context:i]
+        new_r = card_words_org[i:i+num_context]
+        new_word = new_l + new_m + new_r
         print(new_word)
+    #for new_word in window(card_words_org, num_context):
+        #print(list(new_word))
         new_string = ''
-        for word in new_word:
+        for word in list(new_word):
             new_string += word
             new_string += " "
         if new_string == "":
             new_string = " "
         ngram_list.append(Sentence(new_string))
+        
 
     card_words = ngram_list
     return card_words, card_words_org
@@ -85,14 +110,15 @@ def create_ngram(num_context, card, card_tag):
 def embed(card_tag, card_as_sentence, card_words, card_words_org):
     stacked_embeddings.embed(card_tag)
     #stacked_embeddings.embed(card_as_sentence)
-    print(card_as_sentence.get_embedding().reshape(1,-1))
+    #print(card_as_sentence.get_embedding().reshape(1,-1))
     word_list = []
     count = 0
     token_removed_ct = 0
     card_tag_emb = card_tag.get_embedding().reshape(1,-1)
-    for word in card_as_sentence:
+    for word in card_words_org: #card_as_sentence:
         #word = word.reshape(1,-1)
         n_gram_word = card_words[count]
+        #print(n_gram_word)
         '''
         if len(n_gram_word) == 0:
             th_tensor = torch.zeros(list(card_tag.get_embedding().size()))
@@ -102,9 +128,12 @@ def embed(card_tag, card_as_sentence, card_words, card_words_org):
         stacked_embeddings.embed(n_gram_word)
         word_sim = cosine_similarity(card_tag_emb, n_gram_word.get_embedding().reshape(1,-1))
         #word_sim = jaccard_similarity_score(card_tag_emb, n_gram_word.get_embedding().reshape(1,-1), normalize=True)
-        word_tup = (card_words_org[count], word_sim)
+        word_tup = (card_words_org[count], word_sim) #card_words_org[count]
         count += 1
         word_list.append(word_tup)
+    print(len(word_list))
+    print(len(card_words))
+    print(len(card_words_org))
     return word_list
 
 
@@ -182,7 +211,7 @@ for i in range(0, 1000):
         a_par.add_run(card_auth).bold = True
         c_par = document.add_paragraph(card_cite)
         par = document.add_paragraph()
-        word_list = run_loop(10, card, card_tag)
+        word_list = run_loop(20, card, card_tag)
         new_sum(word_list)
     else:
         document.save('test_sum.docx')
