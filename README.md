@@ -3,9 +3,44 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 oh, and also, 
 Parsing code for a novel dataset designed for usage in the field of NLP &
 
+## UPDATE 4/9/2019
 
-## UPDATE 3/15/2019
-**Welcome to the Era of automated competative debate.**
+** Install Instructions ** 
+
+1. Procure a Laptop with modern Linux install (say Ubuntu, but I developed this with Manjaro) either on baremetal or in a VM (Virtualbox is what I used ). Linux is free and has the same backend architecture (unix) as MacOS so if you're used to MacOS Linux isn't totally alien. 
+
+2. Confirm that you have Python 3.6+ (Should come preinstalled in a modern Linux install). Open a terminal and Type "python" or "python3" (if python2 comes up), and take note of which version of Python 3 you have. 
+
+3. Cofnrim that you have "pip" (The python package manager). usually a simple "pip" or "pip3" will confirm if you have it or not. If this is not present, it can be installed via apt-get (for ubuntu users) 
+
+5. Install [PyTorch](https://pytorch.org/). The install instructions are quite easy - you'll want to install the "pip" package, correponding to your Python version. Advanced users who want to take advantage of their GPU and who have installed CUDA and CUDNN can select their corresponding CUDA version - but most users will want to select "None". Finally, PyTorch will generate a one line command. 
+
+A user with Python 3.7 and not using cuda would run this command: 
+```
+pip3 install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
+pip3 install torchvision
+```
+5. move to your favorite empty directory, and clone flair into that directory 
+```
+git clone https://github.com/zalandoresearch/flair.git
+cd flair-master
+pip3 install requirments.txt
+```
+6. finally, in the same directory as flair, download (from this repo) cx_db8_flair.py and cx_requirments.txt
+```
+pip3 install cx_requirments.txt
+```
+It's installed! You should be ready to cx_db8 this from the command line with a 
+```
+python3 -i cx_db8_flair.py
+```
+
+It will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". It will then prompt you to add card text into Ctrl-D is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. It will then prompty for a card author and date, and then the citation. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
+
+Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. The default settings are a balance
+
+Please submit issues for help with installation or running cx_db8. 
+
 
 ## UPDATE 3/30/2019
 
