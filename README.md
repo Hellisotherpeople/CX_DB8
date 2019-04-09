@@ -1,5 +1,6 @@
 # CX_DB8
-[![GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg)
+[GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg)
+
 A contextual, token extracting summarizer designed from the ground up by a former debater for debaters (but it'll also work on your reading) 
 also,
 Parsing code for a novel dataset designed for usage in the field of NLP
