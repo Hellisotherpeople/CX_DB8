@@ -5,8 +5,11 @@ Parsing code for a novel dataset designed for usage in the field of NLP
 
 ##### Table of Contents  
 [Examples](#Examples)  
+
 [Install Instructions](#update-492019-install-instructions)
+
 [What is this?](#what-is-this)
+
 [Future Plans](#what-are-your-plans)
 
 
