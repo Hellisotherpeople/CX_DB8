@@ -4,10 +4,10 @@
 A contextual, token extracting summarizer designed from the ground up by a former debater for debaters 
 
 # Table of Contents  
-[Examples](#Examples)  
-[Install Instructions](#update-492019-install-instructions)
-[What is this?](#what-is-this)
-[Future Plans](#what-are-your-plans)
+* [Examples](#Examples)  
+* [Install Instructions](#update-492019-install-instructions)
+* [What is this?](#what-is-this)
+* [Future Plans](#what-are-your-plans)
 
 
 
