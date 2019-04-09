@@ -1,7 +1,7 @@
 # CX_DB8
 A contextual, token extracting summarizer designed from the ground up by a former debater for debaters (but it'll also work on your reading) 
-oh, and also, 
-Parsing code for a novel dataset designed for usage in the field of NLP &
+also,
+Parsing code for a novel dataset designed for usage in the field of NLP
 
 ## UPDATE 4/9/2019: Install Instructions
 
