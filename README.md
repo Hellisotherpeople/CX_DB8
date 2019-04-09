@@ -3,6 +3,20 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 also,
 Parsing code for a novel dataset designed for usage in the field of NLP
 
+
+
+## Examples
+
+
+**Card tag given: "Humanity is an abstraction".**
+
+![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
+
+
+**And now, it also generates word docs!!**
+
+![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer2.JPG)
+
 ## UPDATE 4/9/2019: Install Instructions
 
 ** Install Instructions ** 
@@ -43,17 +57,6 @@ Depending on the paramaters chosen, summarization may take a long time (more acc
 
 Please submit issues for help with installation or running cx_db8 here with the issue tracker. 
 
-## Examples
-
-
-**Card tag given: "Humanity is an abstraction".**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
-
-
-**And now, it also generates word docs!!**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer2.JPG)
 
 
 
