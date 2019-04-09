@@ -43,6 +43,20 @@ Depending on the paramaters chosen, summarization may take a long time (more acc
 
 Please submit issues for help with installation or running cx_db8 here with the issue tracker. 
 
+## Examples
+
+
+**Card tag given: "Humanity is an abstraction".**
+
+![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
+
+
+**And now, it also generates word docs!!**
+
+![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer2.JPG)
+
+
+
 
 ## UPDATE 3/30/2019
 
@@ -57,16 +71,6 @@ Hello all. I am actively working on this project. For now, I'm working on 3 thin
 3. Documentation - I'm bad at this and it's a low priority for me while I try to get the actual tool working. 
 
 4. Windows support - Honestly I'm going to need some evidence that people are actually trying to use this before I focus on it. For now main functionality comes first. 
-
-
-**Card tag given: "Humanity is an abstraction".**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
-
-
-**And now, it also generates word docs!!**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer2.JPG)
 
 
 I finally got fed up with trying to experiment with supervised summarization systems. Thanks to the magical folks at Google for creating the unsupervised ["Universal Sentence Encoder"](https://tfhub.dev/google/universal-sentence-encoder/2) which is more rightly called the "Universal Text Encoder" given how smoothly it works on Words, Sentences, or even whole Documents. 
