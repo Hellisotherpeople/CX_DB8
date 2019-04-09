@@ -3,7 +3,7 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 oh, and also, 
 Parsing code for a novel dataset designed for usage in the field of NLP &
 
-## UPDATE 4/9/2019
+## UPDATE 4/9/2019: Install Instructions
 
 ** Install Instructions ** 
 
