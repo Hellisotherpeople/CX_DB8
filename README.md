@@ -35,11 +35,13 @@ It's installed! You should be ready to cx_db8 this from the command line with a
 python3 -i cx_db8_flair.py
 ```
 
+Flair will go and download the embeddings, which are fasttext, extvec, and flairs fast models. These will up about 3.5 - 4 gigs of diskspace, and will take up about that much RAM during execution.
+
 It will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". It will then prompt you to add card text into Ctrl-D is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. It will then prompty for a card author and date, and then the citation. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
 
-Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. The default settings are a balance
+Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. The default settings are a balance of the two, though I advise folks to open cx_db8_flair.py with their favorite text editor and test out the "fast" and "slow" settings, as they have different advantages/disadvantages (on fast settings, a whole 300 card case could be cut in 1-2 minutes) 
 
-Please submit issues for help with installation or running cx_db8. 
+Please submit issues for help with installation or running cx_db8 here with the issue tracker. 
 
 
 ## UPDATE 3/30/2019
