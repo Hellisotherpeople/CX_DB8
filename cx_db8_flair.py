@@ -7,7 +7,7 @@ import torch
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import jaccard_similarity_score
 #import numpy as np
-from docx import Document 
+from docx import Document
 import sys
 import numpy as np
 from itertools import islice
@@ -15,7 +15,7 @@ from collections import deque
 
 
 
-document = Document() ## Create a python-docx document 
+document = Document() ## Create a python-docx document
 
 
 class underline: ## weird stuff to make python show underlining and highlighting in it's printed output - kinda neat
@@ -27,11 +27,11 @@ class underline: ## weird stuff to make python show underlining and highlighting
 """
 ###### The Stacked Embeddings are the list of word embeddings which we choose for converting a word window into a "meaning" vector. #####
 
-To enable a set of embeddings, remove the pound sign "#" from the beginning of the Embedding. 
+To enable a set of embeddings, remove the pound sign "#" from the beginning of the Embedding.
 
-FAST: To summarize extremely fast, enable on the "WordEmbeddings" selections (en is fasttext, extvec is a skip-gram model) 
-MEDIUM: To summarize with much more semantic understanding but running still relatively quickly, enable the "FlairEmbeddings" with the word "fast" at the end (this is the default). This is a lot slower than "FAST" but has dramatically improved abilities to understand meaning. 
-SLOW: To summarize with the state-of-the-art, but much more time consuming concatonation of BERT, Flair, and FastText, uncomment the "BertEmbeddings" layer, and remove the word "-fast" from the end of "news-forward-fast" and "news-backward-fast". This is about 2x as slow  as the medium settings 
+FAST: To summarize extremely fast, enable on the "WordEmbeddings" selections (en is fasttext, extvec is a skip-gram model)
+MEDIUM: To summarize with much more semantic understanding but running still relatively quickly, enable the "FlairEmbeddings" with the word "fast" at the end (this is the default). This is a lot slower than "FAST" but has dramatically improved abilities to understand meaning.
+SLOW: To summarize with the state-of-the-art, but much more time consuming concatonation of BERT, Flair, and FastText, uncomment the "BertEmbeddings" layer, and remove the word "-fast" from the end of "news-forward-fast" and "news-backward-fast". This is about 2x as slow  as the medium settings
 
 
 """
@@ -52,7 +52,7 @@ def set_card():
     if str(card_tag) == "-1": #This will not work with large documents when bert is enabled
         card_tag = Sentence(str(card))
         tag_str = ""
-    else:    
+    else:
         tag_str = str(card_tag)
         card_tag = Sentence(str(card_tag))
     return card, card_tag, tag_str
@@ -73,38 +73,21 @@ def create_ngram(num_context, card, card_tag):
     card_words_org = card.split()
     ngram_list = []
     #print(len(card_words_org))
-    
+
     for i in range(0, len(card_words_org)):
-        #print(i)
-        '''
-        if i >= len(card_words_org) - (num_context):
-            new_word = card_words_org[i-num_context:i]
-        elif i >= num_context:
-            new_word = card_words_org[i-num_context:i+num_context]
-        else:
-            new_word = card_words_org[i:i+num_context] #make it so that each word takes it's prior words as context as well 
-        '''
-        
-        new_m = card_words_org[i:i]
-        new_l = card_words_org[i-num_context:i]
-        new_r = card_words_org[i:i+num_context]
-        new_word = new_l + new_m + new_r
+        # Get the sliding window.
+        lower_bound = i - num_context if i - num_context > 0 else 0
+        upper_bound = i + num_context if i + num_context < len(card_words_org) else len(card_words_org) - 1
+        new_word = card_words_org[lower_bound : upper_bound]
         print(new_word)
-    #for new_word in window(card_words_org, num_context):
-        #print(list(new_word))
-        new_string = ''
-        for word in list(new_word):
-            new_string += word
-            new_string += " "
+
+        # Join the window.
+        new_string = " ".join(new_word)
         if new_string == "":
-            new_string = " "
+          new_string = " "
         ngram_list.append(Sentence(new_string))
-        
 
-    card_words = ngram_list
-    return card_words, card_words_org
-
-
+    return ngram_list, card_words_org
 
 
 def embed(card_tag, card_as_sentence, card_words, card_words_org):
@@ -112,24 +95,13 @@ def embed(card_tag, card_as_sentence, card_words, card_words_org):
     #stacked_embeddings.embed(card_as_sentence)
     #print(card_as_sentence.get_embedding().reshape(1,-1))
     word_list = []
-    count = 0
     token_removed_ct = 0
     card_tag_emb = card_tag.get_embedding().reshape(1,-1)
-    for word in card_words_org: #card_as_sentence:
-        #word = word.reshape(1,-1)
+    for word, count in zip(card_words_org, range(0, len(card_words_org))):
         n_gram_word = card_words[count]
-        #print(n_gram_word)
-        '''
-        if len(n_gram_word) == 0:
-            th_tensor = torch.zeros(list(card_tag.get_embedding().size()))
-            word_sim = cosine_similarity(card_tag.get_embedding().reshape(1,-1), th_tensor.reshape(1,-1))
-        else:
-        '''
         stacked_embeddings.embed(n_gram_word)
         word_sim = cosine_similarity(card_tag_emb, n_gram_word.get_embedding().reshape(1,-1))
-        #word_sim = jaccard_similarity_score(card_tag_emb, n_gram_word.get_embedding().reshape(1,-1), normalize=True)
         word_tup = (card_words_org[count], word_sim) #card_words_org[count]
-        count += 1
         word_list.append(word_tup)
     print(len(word_list))
     print(len(card_words))
@@ -138,10 +110,7 @@ def embed(card_tag, card_as_sentence, card_words, card_words_org):
 
 
 def summarize(word_list):
-    word_val_list = []
-    for sum_word in word_list:
-        word_val_list.append(float(sum_word[1]))
-    return word_val_list
+    return [sum_word[1] for sum_word in word_list]
 
 def run_loop(context, card, card_tag):
     card_as_sentence = Sentence(card)
@@ -159,16 +128,12 @@ def parse_word_val_list(word_list, h, n):
             runner = par.add_run(sum_word[0] + " ")
             runner.underline = True
             runner.bold = True
-            sum_str += str(sum_word[0])
-            sum_str += " "
-            sum_str += underline.end_underline
+            sum_str += " ".join([str(sum_word[0]), underline.end_underline])
         elif float(sum_word[1]) > n:
             sum_str += underline.start_underline
             runner = par.add_run(sum_word[0] + " ")
             runner.underline = True
-            sum_str += str(sum_word[0])
-            sum_str += " "
-            sum_str += underline.end_underline
+            sum_str += " ".join([str(sum_word[0]), underline.end_underline])
         else:
             token_removed_ct += 1
             sum_str += str(sum_word[0])
