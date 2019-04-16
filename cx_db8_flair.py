@@ -143,14 +143,11 @@ def parse_word_val_list(word_list, h, n):
             removed_str += " "
     return sum_str, removed_str, token_removed_ct
 
-def new_sum(word_list):
+def new_sum(word_list, underline_p, highlight_p):
     val_list = summarize(word_list)
-    th_9 = np.percentile(val_list, 90)
-    th_75 = np.percentile(val_list, 60)
-    th_50 = np.percentile(val_list, 50)
-    th_25 = np.percentile(val_list, 35)
-    th_10 = np.percentile(val_list, 10)
-    sum_str, removed_str, token_removed_ct = parse_word_val_list(word_list, th_75, th_25)
+    th_underline = np.percentile(val_list, float(underline_p))
+    th_highlight = np.percentile(val_list, float(highlight_p))
+    sum_str, removed_str, token_removed_ct = parse_word_val_list(word_list, th_highlight, th_underline)
 
 
     print("CARD_TAG :")
@@ -170,6 +167,8 @@ for i in range(0, 1000):
     if cont == "y":
         card, card_tag, tag_str = set_card()
         head = document.add_heading(tag_str, level=1)
+        underline_p = input("what percentile should be underlined? (numbers from 1 to 99 acceptable, a 90 means only the top 10% is underlined")
+        highlight_p = input("what percentile to highlight? (should be higher than the previous value)") 
         card_auth = input("what's the card author and date?")
         card_cite = input("what's the citation?")
         a_par = document.add_paragraph()
@@ -177,7 +176,7 @@ for i in range(0, 1000):
         c_par = document.add_paragraph(card_cite)
         par = document.add_paragraph()
         word_list = run_loop(20, card, card_tag)
-        new_sum(word_list)
+        new_sum(word_list, underline_p, highlight_p)
     else:
         document.save('test_sum.docx')
         break
