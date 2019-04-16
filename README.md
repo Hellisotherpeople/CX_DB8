@@ -23,6 +23,8 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer2.JPG)
 
+## UPDATE 4/16/2019: Now asks user what percentile of the document that they want underlined or highlighted. 
+
 ## UPDATE 4/9/2019: Install Instructions
 
 ** Install Instructions ** 
