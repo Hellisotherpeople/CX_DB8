@@ -46,7 +46,6 @@ for i in range(0, len(card_words_org)):
     ngram_list.append(new_string)
 
 card_words = ngram_list
-#print(card_words)
 
 def find_ngrams(input_list, n):
     return zip(*[input_list[i:] for i in range(n)])
@@ -65,14 +64,15 @@ def vector_cos5(v1, v2):
 
 with tf.Session() as session:
     session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-    card_tag_embeddings = session.run(embed(card_tag)) #card_tag for user specified
-    card_words_embeddings = session.run(embed(card_words))
+    card_tag_embeddings = session.run(embed(card_tag)) # card_tag for user specified
+    card_words_embeddings = session.run(embed(card_words)) # (card_words represents the array of card ngrams)
     #print(cosine_similarity(card_tag_embeddings, card_words_embeddings[0].reshape(1, -1)))
     word_list = []
     count = 0
     token_removed_ct = 0
     for word in card_words_embeddings:
         word = word.reshape(1,-1)
+        # determine the similarity between the card tag and the current ngram
         word_sim = cosine_similarity(card_tag_embeddings, word)
         word_tup = (card_words_org[count], word_sim)
         count += 1
