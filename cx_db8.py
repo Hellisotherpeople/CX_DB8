@@ -1,11 +1,6 @@
 import tensorflow as tf
 import tensorflow_hub as hub
-import matplotlib.pyplot as plt
-import numpy as np
 import os
-import pandas as pd
-import re
-import seaborn as sns
 import operator
 import math
 from sklearn.metrics.pairwise import cosine_similarity
@@ -94,5 +89,3 @@ with tf.Session() as session:
     print("tokens removed:" + " " + str(token_removed_ct))
     print("NOT UNDERLINED")
     print(removed_str)
-
-
