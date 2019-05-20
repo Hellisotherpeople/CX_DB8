@@ -87,7 +87,6 @@ with tf.Session() as session:
             token_removed_ct += 1
             removed_str += str(sum_word[0])
             removed_str += " "
-    # print(
     print("CARD: ")
     print(card)
     print("GENERATED SUMMARY: ")
