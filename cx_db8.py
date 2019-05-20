@@ -31,9 +31,13 @@ In 1977, The Ohio State University SETI's program made international headlines a
 
 card_words_org = card.split()
 
+ngram_length = 10 # the 'n' in the ngrams
+
+
 ngram_list = []
+# generate ngrams
 for i in range(0, len(card_words_org)):
-    new_word = card_words_org[i-10:i+10] #make it so that each word takes it's prior words as context as well
+    new_word = card_words_org[i - ngram_length:i + ngram_length] #make it so that each word takes it's prior words as context as well
     print(new_word)
     new_string = ''
     for word in new_word:
