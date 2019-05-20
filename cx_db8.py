@@ -42,20 +42,6 @@ for i in range(0, len(card_words_org)):
 
 card_words = ngram_list
 
-def find_ngrams(input_list, n):
-    return zip(*[input_list[i:] for i in range(n)])
-
-
-def dot_product2(v1, v2):
-    return sum(map(operator.mul, v1, v2))
-
-
-def vector_cos5(v1, v2):
-    prod = dot_product2(v1, v2)
-    len1 = np.sqrt(dot_product2(v1, v1))
-    len2 = np.sqrt(dot_product2(v2, v2))
-    return prod / (len1 * len2)
-
 
 with tf.Session() as session:
     session.run([tf.global_variables_initializer(), tf.tables_initializer()])
