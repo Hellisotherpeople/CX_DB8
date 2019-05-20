@@ -77,12 +77,12 @@ with tf.Session() as session:
         word_tup = (card_words_org[count], word_sim)
         count += 1
         word_list.append(word_tup)
-    sum_str = ""
+    summary_string = ""
     removed_str = ""
     for sum_word in word_list:
         if float(sum_word[1]) > 0.25:
-            sum_str += str(sum_word[0])
-            sum_str += " "
+            summary_string += str(sum_word[0])
+            summary_string += " "
         else:
             token_removed_ct += 1
             removed_str += str(sum_word[0])
@@ -91,7 +91,7 @@ with tf.Session() as session:
     print("CARD: ")
     print(card)
     print("GENERATED SUMMARY: ")
-    print(sum_str)
+    print(summary_string)
     print("tokens removed:" + " " + str(token_removed_ct))
     print("NOT UNDERLINED")
     print(removed_str)
