@@ -1,11 +1,6 @@
 import tensorflow as tf
 import tensorflow_hub as hub
-import matplotlib.pyplot as plt
-import numpy as np
 import os
-import pandas as pd
-import re
-import seaborn as sns
 import operator
 import math
 from sklearn.metrics.pairwise import cosine_similarity
@@ -31,9 +26,13 @@ In 1977, The Ohio State University SETI's program made international headlines a
 
 card_words_org = card.split()
 
+ngram_length = 10 # the 'n' in the ngrams
+
+
 ngram_list = []
+# generate ngrams
 for i in range(0, len(card_words_org)):
-    new_word = card_words_org[i-10:i+10] #make it so that each word takes it's prior words as context as well
+    new_word = card_words_org[i - ngram_length:i + ngram_length] #make it so that each word takes it's prior words as context as well
     print(new_word)
     new_string = ''
     for word in new_word:
@@ -42,54 +41,37 @@ for i in range(0, len(card_words_org)):
     ngram_list.append(new_string)
 
 card_words = ngram_list
-#print(card_words)
-
-def find_ngrams(input_list, n):
-    return zip(*[input_list[i:] for i in range(n)])
-
-
-def dot_product2(v1, v2):
-    return sum(map(operator.mul, v1, v2))
-
-
-def vector_cos5(v1, v2):
-    prod = dot_product2(v1, v2)
-    len1 = np.sqrt(dot_product2(v1, v1))
-    len2 = np.sqrt(dot_product2(v2, v2))
-    return prod / (len1 * len2)
 
 
 with tf.Session() as session:
     session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-    card_tag_embeddings = session.run(embed(card_tag)) #card_tag for user specified
-    card_words_embeddings = session.run(embed(card_words))
+    card_tag_embeddings = session.run(embed(card_tag)) # card_tag for user specified
+    card_words_embeddings = session.run(embed(card_words)) # (card_words represents the array of card ngrams)
     #print(cosine_similarity(card_tag_embeddings, card_words_embeddings[0].reshape(1, -1)))
     word_list = []
     count = 0
     token_removed_ct = 0
     for word in card_words_embeddings:
         word = word.reshape(1,-1)
+        # determine the similarity between the card tag and the current ngram
         word_sim = cosine_similarity(card_tag_embeddings, word)
         word_tup = (card_words_org[count], word_sim)
         count += 1
         word_list.append(word_tup)
-    sum_str = ""
+    summary_string = ""
     removed_str = ""
     for sum_word in word_list:
         if float(sum_word[1]) > 0.25:
-            sum_str += str(sum_word[0])
-            sum_str += " "
+            summary_string += str(sum_word[0])
+            summary_string += " "
         else:
             token_removed_ct += 1
             removed_str += str(sum_word[0])
             removed_str += " "
-    # print(
     print("CARD: ")
     print(card)
     print("GENERATED SUMMARY: ")
-    print(sum_str)
+    print(summary_string)
     print("tokens removed:" + " " + str(token_removed_ct))
     print("NOT UNDERLINED")
     print(removed_str)
-
-
