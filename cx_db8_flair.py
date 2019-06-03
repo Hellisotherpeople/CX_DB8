@@ -132,15 +132,15 @@ def parse_word_val_list(word_list, h, n, val_list):
     removed_str = ""
     token_removed_ct = 0
     to_highlight = np.asarray([i for i in val_list if i > h])
-    scaler = MinMaxScaler(feature_range = (58, 63))
+    scaler = MinMaxScaler(feature_range = (20, 255))
     scaler.fit(to_highlight.reshape(-1, 1))
     for sum_word in word_list:
         if float(sum_word[1]) > h:
             if dynamic:
-                bgnum = int(scaler.transform(float(sum_word[1])))
+                bgnum = int(scaler.transform(sum_word[1].detach().numpy().reshape(-1, 1)))
             else:
                 bgnum = 50
-            sum_str += ef.u + bg(bgnum)
+            sum_str += ef.u + bg(bgnum, bgnum, 0)
             runner = par.add_run(sum_word[0] + " ")
             runner.underline = True
             runner.bold = True
@@ -166,10 +166,10 @@ def new_sum(word_list, underline_p, highlight_p):
     sum_str, removed_str, token_removed_ct = parse_word_val_list(word_list, th_highlight, th_underline, val_list)
 
 
-    print("CARD_TAG :")
-    print(card_tag)
     print("CARD: ")
     print(card)
+    print("CARD_TAG :")
+    print(card_tag)
     print("GENERATED SUMMARY: ")
     print(sum_str)
     print("tokens removed:" + " " + str(token_removed_ct))
