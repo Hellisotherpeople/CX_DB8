@@ -18,15 +18,15 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 
 2. Confirm that you have Python 3.6+ (Should come preinstalled in a modern Linux install). Open a terminal and Type "python" or "python3" (if python2 comes up), and take note of which version of Python 3 you have. 
 
-3. Cofnrim that you have "pip" (The python package manager). usually a simple "pip" or "pip3" will confirm if you have it or not. If this is not present, it can be installed via apt-get (for ubuntu users) 
+3. Confirm that you have "pip" (The python package manager). usually a simple "pip" or "pip3" will confirm if you have it or not. If this is not present, it can be installed via apt-get (for ubuntu users) 
 
-5. Install [PyTorch](https://pytorch.org/). The install instructions are quite easy - you'll want to install the "pip" package, correponding to your Python version. Advanced users who want to take advantage of their GPU and who have installed CUDA and CUDNN can select their corresponding CUDA version - but most users will want to select "None". Finally, PyTorch will generate a one line command. 
+4. Install [PyTorch](https://pytorch.org/). The install instructions are quite easy - you'll want to install the "pip" package, correponding to your Python version. Advanced users who want to take advantage of their GPU and who have installed CUDA and CUDNN can select their corresponding CUDA version - but most users will want to select "None". Finally, PyTorch will generate a one line command. 
 
-A user with Python 3.7 and not using cuda would run this command: 
-```
-pip3 install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
-pip3 install torchvision
-```
+  A user with Python 3.7 and not using cuda would run this command: 
+  ```
+  pip3 install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
+  pip3 install torchvision
+  ```
 5. move to your favorite empty directory, and clone CX_DB8 into that directory 
 ```
 git clonehttps://github.com/Hellisotherpeople/CX_DB8.git
