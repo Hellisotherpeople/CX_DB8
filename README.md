@@ -27,16 +27,13 @@ A user with Python 3.7 and not using cuda would run this command:
 pip3 install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
 pip3 install torchvision
 ```
-5. move to your favorite empty directory, and clone flair into that directory 
+5. move to your favorite empty directory, and clone CX_DB8 into that directory 
 ```
-git clone https://github.com/zalandoresearch/flair.git
-cd flair-master
+git clonehttps://github.com/Hellisotherpeople/CX_DB8.git
+cd CX_DB8
 pip3 install requirments.txt
 ```
-6. finally, in the same directory as flair, download (from this repo) cx_db8_flair.py and cx_requirments.txt
-```
-pip3 install cx_requirments.txt
-```
+
 It's installed! You should be ready to cx_db8 this from the command line with a 
 ```
 python3 -i cx_db8_flair.py
