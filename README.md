@@ -10,7 +10,7 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 * [Future Plans](#what-are-your-plans)
 
 
-##Install Instructions
+## Install Instructions
 
 
 1. Procure a Laptop with modern Linux install (say Ubuntu, but I developed this with Manjaro) either on baremetal or in a VM (Virtualbox is what I used ). Linux is free and has the same backend architecture (unix) as MacOS so if you're used to MacOS Linux isn't totally alien. 
