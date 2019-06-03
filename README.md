@@ -4,7 +4,7 @@
 A contextual, token extracting summarizer designed from the ground up by a former debater for debaters 
 
 # Table of Contents  
-* [Install Instructions](#Install Instructions)
+* [Install Instructions](#install-instructions)
 * [Examples](#Examples)  
 * [What is this?](#what-is-this)
 * [Future Plans](#what-are-your-plans)
