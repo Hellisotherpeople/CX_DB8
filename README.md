@@ -5,6 +5,7 @@ A contextual, token extracting summarizer designed from the ground up by a forme
 
 # Table of Contents  
 * [Install Instructions](#install-instructions)
+* [Usage Instructions](#usage-instructions)
 * [Examples](#Examples)  
 * [What is this?](#what-is-this)
 * [Future Plans](#what-are-your-plans)
@@ -35,6 +36,10 @@ It's installed! You should be ready to cx_db8 this from the command line with a
 ```
 python3 -i cx_db8_flair.py
 ```
+
+
+## Usage Instructions
+
 
 Flair will go and download the embeddings, which are fasttext, extvec, and flairs fast models. These will up about 3.5 - 4 gigs of diskspace, and will take up about that much RAM during execution.
 
