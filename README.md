@@ -52,6 +52,7 @@ Please submit issues for help with installation or running cx_db8 here with the 
 
 ## Examples
 
+![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/cxdb8pic.JPG)
 
 **Card tag given: "Humanity is an abstraction".**
 
