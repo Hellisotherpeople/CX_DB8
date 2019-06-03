@@ -51,6 +51,7 @@ Please submit issues for help with installation or running cx_db8 here with the 
 
 
 ## Examples
+**Settings used: underline top 30th percentile, highlight 35th percentile**
 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/cxdb8pic.JPG)
 
