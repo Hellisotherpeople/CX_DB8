@@ -4,15 +4,14 @@
 A contextual, token extracting summarizer designed from the ground up by a former debater for debaters 
 
 # Table of Contents  
+* [Install Instructions](#Install Instructions)
 * [Examples](#Examples)  
-* [Install Instructions](#update-492019-install-instructions)
 * [What is this?](#what-is-this)
 * [Future Plans](#what-are-your-plans)
 
 
-## UPDATE 4/9/2019: Install Instructions
+##Install Instructions
 
-**Install Instructions** 
 
 1. Procure a Laptop with modern Linux install (say Ubuntu, but I developed this with Manjaro) either on baremetal or in a VM (Virtualbox is what I used ). Linux is free and has the same backend architecture (unix) as MacOS so if you're used to MacOS Linux isn't totally alien. 
 
