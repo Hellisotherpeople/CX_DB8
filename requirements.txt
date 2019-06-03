@@ -1,0 +1,17 @@
+python_docx==0.8.10
+matplotlib==3.0.3
+umap_learn==0.3.8
+gensim==3.7.3
+seaborn==0.9.0
+torch==1.1.0
+numpy==1.16.2
+sty==1.0.0b11
+flair==0.4.2
+smart_open==1.8.2
+pandas==0.24.2
+beautifulsoup4==4.7.1
+docx==0.2.4
+scikit_learn==0.21.2
+tensorflow==1.13.1
+tensorflow_hub==0.4.0
+umap==0.1.1
