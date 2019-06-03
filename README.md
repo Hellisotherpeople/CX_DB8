@@ -26,7 +26,7 @@ A contextual, token extracting summarizer designed from the ground up by a forme
   ```
 5. move to your favorite empty directory, and clone CX_DB8 into that directory 
 ```
-git clonehttps://github.com/Hellisotherpeople/CX_DB8.git
+git clone https://github.com/Hellisotherpeople/CX_DB8.git
 cd CX_DB8
 pip3 install requirments.txt
 ```
