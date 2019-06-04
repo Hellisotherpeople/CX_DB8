@@ -62,7 +62,7 @@ It will then prompt you to add card text into Ctrl-D is pressed. Then it will as
 
 It will ask you what percentile that you want underlined and highlighted. this is user dependent based on the size of the summary. 
 
-It will then prompty for a card author and date, and then the citation. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
+It will then prompty for a card author and date, and then the citation. This is only relavent for the creation of the word document. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
 
 Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. 
 
