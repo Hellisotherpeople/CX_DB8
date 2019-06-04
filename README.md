@@ -40,12 +40,24 @@ python3 -i cx_db8_flair.py
 
 ## Usage Instructions
 
+Sorry, but right now I don't have a good configuration setting abstraction - so you need to edit the source code to change settings. Don't worry, it's not hard 
+First, open up cx_db8_flair.py in your favorite text editor
+```
+vim cx_db8_flair.py
+```
 
-Flair will go and download the embeddings, which are fasttext, extvec, and flairs fast models. These will up about 3.5 - 4 gigs of diskspace, and will take up about that much RAM during execution.
+Edit lines 36-45 as you see fit. Comment out the embeddings you don't want (comment with the # sign) and uncomment the embeddings that you do want to use. Stuff closer to the top should be faster to run but worse at summarization (in general). You can mix and match any combination of embeddings (even your own finetuned embeddings)
 
-It will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". It will then prompt you to add card text into Ctrl-D is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. It will then prompty for a card author and date, and then the citation. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
+After you've selected the embeddings combination that you want. Flair will go and download the embeddings. Depending on the selected combination, these can take 4GB+ of diskspace, and will take up about that much RAM during execution.
 
-Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. The default settings are a balance of the two, though I advise folks to open cx_db8_flair.py with their favorite text editor and test out the "fast" and "slow" settings, as they have different advantages/disadvantages (on fast settings, a whole 300 card case could be cut in 1-2 minutes) 
+
+Upon first running cx_db8_flair.py, CX_DB8 will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". 
+
+It will then prompt you to add card text into Ctrl-D is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. 
+
+It will then prompty for a card author and date, and then the citation. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
+
+Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. 
 
 Please submit issues for help with installation or running cx_db8 here with the issue tracker. 
 
@@ -66,18 +78,6 @@ Please submit issues for help with installation or running cx_db8 here with the 
 
 
 ## UPDATE 3/30/2019
-
-Hello all. I am actively working on this project. For now, I'm working on 3 things 
-
-1. The speed of inference. I assume most debaters will not have access to a GPU or the inclination to get PyTorch to play nice with their own GPU. This means that by default, my summarizer will use embeddings that are fast, but maybe slightly less effective at understanding semantic meaning (like, 1-2 % worse). The default settings that this code is uploaded with should allow for extremely fast (~1 sec) summarization of a large piece of evidence. If you want the extra 1-2 %, you can experiment with big contextual models like BERT and ELMO, rather than use the default FastText + ExtVec vectors. Refer to the Flair documentation on the various different embeddings supported to see how to change them 
-
-2. The word document creation - I'm imagining a program that runs in a loop, asking for the user to give it cards (or go through a word doc or folder), so that it can summarize N documents per run instead of one at a time. I'd also like it to support things like Verbatim formats (I want it to highlight, AND emphasize) instead of my crappy underline or bold underline method avalible at present. 
-
-3. Exposing paramaters to the user: It's super easy to change what proportion of the document is underlined or highlighted, and what sets of vector embeddings are used. Right now, it defaults to underlining 75% of the document and highlighting 25% of the document - yet sometimes a team needs different proportions of each. 
-
-3. Documentation - I'm bad at this and it's a low priority for me while I try to get the actual tool working. 
-
-4. Windows support - Honestly I'm going to need some evidence that people are actually trying to use this before I focus on it. For now main functionality comes first. 
 
 
 I finally got fed up with trying to experiment with supervised summarization systems. Thanks to the magical folks at Google for creating the unsupervised ["Universal Sentence Encoder"](https://tfhub.dev/google/universal-sentence-encoder/2) which is more rightly called the "Universal Text Encoder" given how smoothly it works on Words, Sentences, or even whole Documents. 
@@ -115,6 +115,8 @@ There are a multitude of NLP tasks that we could apply to a dataset of thousands
 
 ## So.... where is that tool? 
 
+CX_DB8 is above, but this repo also contains some misc code for analyzing debate corpuses
+
 I'm publishing the dataset parsing and creation tools now to prove that I am (to my knowledge) the first one to write a parsing script capable of converting competative debate evidence into CoNNEL 2003 / Seq2Seq friendly data types. In theory, any Seq2Seq or PoS tagging model that accepts one of those formats can utilize this dataset. I will write a quick tutorial on how to gather these dataset files yourself: 
 
 *Step 1: Download all open evidence files from 2013-2017 ( https://openev.debatecoaches.org/ ) and unzip them into a directory
@@ -132,7 +134,7 @@ I will document how to change the file locations at a future time.
 ## What are your plans? 
 So, it looks like the prefered framework for doing state of the art NLP work [Flair](https://github.com/zalandoresearch/flair/issues/563#issuecomment-470010988) is finally being updated to allow it to train with large datasets. This is going to allow me to create a sentence compression (highlighter) model as soon as the patch allowing large datasets makes it into Flair. I will be training this model using the latest in sentence and word pre-trained embeddings (like google BERT) to give the sentence compression model far more semantic understanding. 
 
-After the sentence compression model is developed, I have 2 other models I want to create for the good of the debate community. 
+After the sentence compression model is developed (DONE), I have 2 other models I want to create for the good of the debate community. 
 
 1. A document classifier. (also possible using Flair). I will soon write some parsing code to extract the class of a debate card. For instance, an answer to the Capitalism Kritik by saying that there would be tranisition wars would be classified as "A2 Capitalism - Transition Wars". Given the way that debate documents are hierachially structured using verbatims "hats and pockets" features - it should be possible to automatically extract a reasonable class for each document. With some cleaning, I hope to get a document classifier that can classify an arbitrary piece of evidence into 1 of N (I assume N is around 200) buckets. 
 
@@ -140,4 +142,3 @@ After the sentence compression model is developed, I have 2 other models I want 
 
 Combing the 3 models, a document highlighter, a document classifier, and a card tag generator with a system to automate taking in new cards (RSS feed or something involving Kafka / REST Apis) - a fully end to end researching system can be created - which will automate away all tasks of debate. 
 
-And when I am done, debate will no longer favor large schools or affluant kids with more free-time than their poorer peers. Imagine it - entire debate cases created nearly automatically
