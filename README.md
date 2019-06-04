@@ -70,7 +70,7 @@ Please submit issues for help with installation or running cx_db8 here with the 
 
 
 ## Examples
-**Settings used: FastText, underline top 30th percentile, highlight 35th percentile**
+**Settings used: FastText, underline top 70%, highlight top 65%, brighter = more important. All highlights are more important than only underlined**
 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/cxdb8pic.JPG)
 
