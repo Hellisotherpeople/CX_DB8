@@ -46,6 +46,9 @@ First, open up cx_db8_flair.py in your favorite text editor
 vim cx_db8_flair.py
 ```
 
+Change line 31 to "True" if you'd like to see "Dynamic" highlights of your embeddings (brightness changes based on "importance"), False is like the bottom examples picture.  
+Change line 32 to "True" to enable experimental vizualization features (not recommended)
+
 Edit lines 36-45 as you see fit. Comment out the embeddings you don't want (comment with the # sign) and uncomment the embeddings that you do want to use. Stuff closer to the top should be faster to run but worse at summarization (in general). You can mix and match any combination of embeddings (even your own finetuned embeddings). Personally, I've had a lot of success with "Law2Vec", a word2vec instance trained on a high quality legal corpus. Turns out lawyers are amazing at Summarizing debate evidence! 
 
 For a list of supported embeddings, look for the tables [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_3_WORD_EMBEDDING.md) and [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md) from Flair 
