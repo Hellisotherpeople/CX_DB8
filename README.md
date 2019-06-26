@@ -29,7 +29,7 @@ A contextual, queryable, token extracting summarizer designed from the ground up
 ```
 git clone https://github.com/Hellisotherpeople/CX_DB8.git
 cd CX_DB8
-pip3 install -r requirments.txt
+pip3 install -r requirements.txt
 ```
 
 It's installed! You should be ready to cx_db8 this from the command line with a 
