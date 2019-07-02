@@ -14,10 +14,10 @@ A contextual, queryable, token extracting summarizer designed from the ground up
 ## Install Instructions
 
 
-1. ~~Procure a Laptop with modern Linux install (say Ubuntu, but I developed this with Manjaro) either on baremetal or in a VM (Virtualbox is what I used ). Linux is free and has the same backend architecture (unix) as MacOS so if you're used to MacOS Linux isn't totally alien. 
+~~1. Procure a Laptop with modern Linux install (say Ubuntu, but I developed this with Manjaro) either on baremetal or in a VM (Virtualbox is what I used ). Linux is free and has the same backend architecture (unix) as MacOS so if you're used to MacOS Linux isn't totally alien. ~~
 Works on any OS! Windows IS supported! 
 
-2. Confirm that you have Python 3.6+ (Should come preinstalled in a modern Linux install). Open a terminal and Type "python" or "python3" (if python2 comes up), and take note of which version of Python 3 you have. 
+2. Confirm that you have Python 3.6+ (Should come preinstalled in a modern Linux install, may need to install on Windows). Open a terminal and Type "python" or "python3" (if python2 comes up), and take note of which version of Python 3 you have. 
 
 3. Confirm that you have "pip" (The python package manager). usually a simple "pip" or "pip3" will confirm if you have it or not. If this is not present, it can be installed via apt-get (for ubuntu users) 
 
