@@ -59,7 +59,7 @@ After you've selected the embeddings combination that you want. Flair will go an
 
 Upon first running cx_db8_flair.py, CX_DB8 will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". 
 
-It will then prompt you to add card text into Ctrl-D is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. 
+It will then prompt you to add card text into Ctrl-D (Ctrl-Z + Enter for Windows) is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. 
 
 It will ask you what percentile that you want underlined and highlighted. this is user dependent based on the size of the summary. 
 
