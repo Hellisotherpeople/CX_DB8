@@ -1,7 +1,7 @@
 # CX_DB8
 ![GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg) ![License](https://img.shields.io/github/license/Hellisotherpeople/CX_DB8.svg) ![Contributors](https://img.shields.io/github/contributors/Hellisotherpeople/CX_DB8.svg) ![Commit](https://img.shields.io/github/last-commit/Hellisotherpeople/CX_DB8.svg)
 
-A contextual, queryable, token extracting summarizer designed from the ground up by a former debater for debaters 
+A contextual, queryable, token (or sentence) extracting summarizer designed from the ground up by a former debater for debaters 
 
 # Table of Contents  
 * [Install Instructions](#install-instructions)
