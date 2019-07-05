@@ -21,27 +21,28 @@ import matplotlib.cm as cm
 from torch.nn import CosineSimilarity
 from sty import fg, bg, ef, rs, RgbFg
 from sklearn.preprocessing import MinMaxScaler
+import syntok.segmenter as segmenter
 
 document = Document() ## Create a python-docx document
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
 
 
-
+sent_level = False
 dynamic = True
 graph = False
 doc_embeddings = []
 scores = []
 
 stacked_embeddings = DocumentPoolEmbeddings([
-                                        #WordEmbeddings('en'),
+                                        WordEmbeddings('en'),
                                         #WordEmbeddings('glove'),
                                         #WordEmbeddings('extvec'),#ELMoEmbeddings('original'),
                                         #BertEmbeddings('bert-base-cased'),
                                         #FlairEmbeddings('news-forward-fast'),
                                         #FlairEmbeddings('news-backward-fast'),
                                         #OpenAIGPTEmbeddings()
-                                        TransformerXLEmbeddings()
+                                        #TransformerXLEmbeddings()
                                         ]) #, mode='max')
 
 
@@ -58,16 +59,6 @@ def set_card():
         card_tag = Sentence(str(card_tag))
     return card, card_tag, tag_str
 
-def window(seq, n):
-    "Returns a sliding window (of width n) over data from the iterable"
-    "   s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   "
-    it = iter(seq)
-    result = tuple(islice(it, n))
-    if len(result) == n:
-        yield result
-    for elem in it:
-        result = result[1:] + (elem,)
-        yield result
 
 def create_ngram(num_context, card, card_tag):
     #card = set_card()
@@ -98,20 +89,29 @@ def embed(card_tag, card_as_sentence, card_words, card_words_org):
     word_list = []
     token_removed_ct = 0
     card_tag_emb = card_tag.get_embedding()
-    for word, count in zip(card_words_org, range(0, len(card_words_org))):
-        n_gram_word = card_words[count]
-        stacked_embeddings.embed(n_gram_word)
-        n_gram_emb = n_gram_word.get_embedding()
+    if sent_level == False:
+        for word, count in zip(card_words_org, range(0, len(card_words_org))):
+            n_gram_word = card_words[count]
+            stacked_embeddings.embed(n_gram_word)
+            n_gram_emb = n_gram_word.get_embedding()
+            if graph:
+                doc_embeddings.append(n_gram_emb.numpy())
+            word_sim = cos(card_tag_emb.reshape(1,-1), n_gram_emb.reshape(1, -1))
+            word_tup = (card_words_org[count], word_sim) #card_words_org[count]
+            word_list.append(word_tup)
         if graph:
-            doc_embeddings.append(n_gram_emb.numpy())
-        word_sim = cos(card_tag_emb.reshape(1,-1), n_gram_emb.reshape(1, -1))
-        word_tup = (card_words_org[count], word_sim) #card_words_org[count]
-        word_list.append(word_tup)
-    if graph:
-        doc_embeddings.append(card_tag_emb.numpy())
-    print(len(word_list))
-    print(len(card_words))
-    print(len(card_words_org))
+            doc_embeddings.append(card_tag_emb.numpy())
+        print(len(word_list))
+        print(len(card_words))
+        print(len(card_words_org))
+    else: 
+        for sentence in card_as_sentence:
+            set_obj = Sentence(sentence)
+            stacked_embeddings.embed(set_obj)
+            sentence_emb = set_obj.get_embedding()
+            word_sim = cos(card_tag_emb.reshape(1,-1), sentence_emb.reshape(1, -1))
+            sentence_tup = (sentence, word_sim)
+            word_list.append(sentence_tup)
     return word_list
 
 
@@ -122,9 +122,20 @@ def get_sim_scores(word_list):
     return [float(sum_word[1]) for sum_word in word_list]
 
 def run_loop(context, card, card_tag):
-    card_as_sentence = Sentence(card)
-    card_words, card_words_org = create_ngram(context, card, card_tag)
-    word_list = embed(card_tag, card_as_sentence, card_words, card_words_org)
+    list_of_sentences = []
+    if sent_level:
+        for paragraph in segmenter.analyze(card):
+            for sentence in paragraph: ## sentence level summarization
+                set_str = ""
+                for token in sentence:
+                    set_str += token.spacing
+                    set_str += token.value
+                list_of_sentences.append(set_str)
+        word_list = embed(card_tag, list_of_sentences, 0, 0)
+    else:
+        card_as_sentence = Sentence(card)
+        card_words, card_words_org = create_ngram(context, card, card_tag)
+        word_list = embed(card_tag, card_as_sentence, card_words, card_words_org)
     return word_list
 
 def parse_word_val_list(word_list, h, n, val_list):
