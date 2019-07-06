@@ -79,6 +79,10 @@ Please submit issues for help with installation or running cx_db8 here with the 
 
 ![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
 
+**It supports sentence level summarization!**
+
+![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/sentence_level.png)
+
 
 **And now, it also generates word docs!!**
 
