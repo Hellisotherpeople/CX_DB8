@@ -1,3 +1,4 @@
+import argparse
 import flair
 from flair.data import Sentence
 from flair.models import SequenceTagger
@@ -45,10 +46,26 @@ stacked_embeddings = DocumentPoolEmbeddings([
                                         #TransformerXLEmbeddings()
                                         ]) #, mode='max')
 
+def arg_parser():
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--card_file_path", "-c", type=str,
+                      help="Path to file for file text")
+  args = parser.parse_args()
+  return args
 
-def set_card():
+def set_card_text(card_path=None):
+  card = ""
+  if card_path:
+    with open(card_path, "r") as in_file:
+      card = in_file.read()
+  else:
     print("Input the Card Text, press Ctrl-D to end text entry")
     card = sys.stdin.read()#input("Input the Card Text: ")
+  return card
+
+
+def set_card(card_path=None):
+    card = set_card_text(card_path)
     card_tag = input("Input the card_tag, or a -1 to summarize in-terms of the card itself: ")
     card = str(card)
     if str(card_tag) == "-1": #This will not work with large documents when bert is enabled
@@ -270,9 +287,10 @@ def visualize3DData (X):
 
 
 for i in range(0, 1000):
+    args = arg_parser()
     cont = input("Do you want to continue? type y for yes else for stop!")
     if cont == "y":
-        card, card_tag, tag_str = set_card()
+        card, card_tag, tag_str = set_card(args.card_file_path)
         head = document.add_heading(tag_str, level=1)
         underline_p = input("what percentile should be underlined? (numbers from 1 to 99 acceptable, a 90 means only the top 10% is underlined")
         highlight_p = input("what percentile to highlight? (should be higher than the previous value)") 
