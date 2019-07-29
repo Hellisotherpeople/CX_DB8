@@ -35,23 +35,44 @@ graph = False
 doc_embeddings = []
 scores = []
 
-stacked_embeddings = DocumentPoolEmbeddings([
-                                        WordEmbeddings('en'),
-                                        #WordEmbeddings('glove'),
-                                        #WordEmbeddings('extvec'),#ELMoEmbeddings('original'),
-                                        #BertEmbeddings('bert-base-cased'),
-                                        #FlairEmbeddings('news-forward-fast'),
-                                        #FlairEmbeddings('news-backward-fast'),
-                                        #OpenAIGPTEmbeddings()
-                                        #TransformerXLEmbeddings()
-                                        ]) #, mode='max')
+# TODO: Allow embeddings to be changed between runs.
+def set_stacked_embeddings(chosen_embeddings):
+    # Lazy assign - we don't want to load these unless the user wants them.
+    embeddings = {'we-en': (lambda: WordEmbeddings('en')),
+                  'we-glove': (lambda: WordEmbeddings('glove')),
+                  'we-extvec': (lambda: WordEmbeddings('extvec')),
+                  'elmo-original': (lambda: ELMoEmbeddings('original')),
+                  'bert-base-cased': (lambda: BertEmbeddings('bert-base-cased')),
+                  'flair-news-forward-fast':
+                    (lambda: FlairEmbeddings('news-forward-fast')),
+                  'flair-news-backward-fast':
+                    (lambda: FlairEmbeddings('news-backward-fast')),
+                  'open-ai': (lambda: OpenAIGPTEmbeddings()),
+                  'trans-xle': (lambda: TransformerXLEmbeddings())}
+    embeddings_to_be_used = []
+    for embedding in chosen_embeddings:
+        # Actually load the embeddings here.
+        embeddings_to_be_used.append(embeddings[embedding]())
+
+    # Maintaining the original functionality.
+    global stacked_embeddings
+
+    stacked_embeddings = DocumentPoolEmbeddings(embeddings_to_be_used)
 
 def arg_parser():
-  parser = argparse.ArgumentParser()
-  parser.add_argument("--card_file_path", "-c", type=str,
-                      help="Path to file for file text")
-  args = parser.parse_args()
-  return args
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--card_file_path", "-c", type=str,
+                        help="Path to file for file text")
+    parser.add_argument("--embedding", "-e", nargs='*',
+                        choices=['we-en', 'we-glove', 'we-extvec',
+                                 'elmo-original', 'bert-base-cased',
+                                 'flair-news-forward-fast',
+                                 'flair-news-backward-fast',
+                                 'open-ai', 'trans-xle'],
+                        default=['we-en'])
+    args = parser.parse_args()
+    set_stacked_embeddings(args.embedding)
+    return args
 
 def set_card_text(card_path=None):
   card = ""
