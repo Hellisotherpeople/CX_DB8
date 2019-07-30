@@ -1,4 +1,5 @@
 import argparse
+import configparser
 import flair
 from flair.data import Sentence
 from flair.models import SequenceTagger
@@ -69,10 +70,42 @@ def arg_parser():
                                  'flair-news-forward-fast',
                                  'flair-news-backward-fast',
                                  'open-ai', 'trans-xle'],
-                        default=['we-en'])
+                        default=[],
+                        help="Embedding Chooser")
+    parser.add_argument("--config_file_path", type=str,
+                        default="cx_db8_flair.ini",
+                        help="Path to the config file")
     args = parser.parse_args()
-    set_stacked_embeddings(args.embedding)
+
+    config = config_parser(args.config_file_path)
+    embeddings = extract_embeddings(config)
+
+    embeddings.union(args.embedding)
+
+    # In the event no embeddings were chosen - set we-en as default.
+    if len(embeddings) == 0:
+      embeddings.add("we-en")
+    set_stacked_embeddings(embeddings)
+
     return args
+
+
+def config_parser(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+    return config
+
+def extract_embeddings(config):
+    if "Embeddings" not in config:
+      return set()
+
+    embeddings = set()
+    for embedding in config["Embeddings"]:
+        if config["Embeddings"].getboolean(embedding):
+            embeddings.add(embedding)
+    return embeddings
+
+
 
 def set_card_text(card_path=None):
   card = ""
