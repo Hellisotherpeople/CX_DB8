@@ -30,7 +30,7 @@ cd CX_DB8
 pip3 install -r requirments.txt
 ```
 
-It's installed! You should be ready to cx_db8 this from the command line with a 
+5. It's installed! You should be ready to cx_db8 this from the command line with a 
 ```
 python3 -i cx_db8_flair.py
 ```
@@ -43,20 +43,32 @@ First, open up cx_db8_flair.py in your favorite text editor
 ```
 vim cx_db8_flair.py
 ```
+
 Change line 31 to "True" if you'd like grammatically correct, sentence level, summarization
+
 Change line 32 to "True" if you'd like to see "Dynamic" highlights of your embeddings (brightness changes based on "importance"), False is like the bottom examples picture.  
+
 Change line 33 to "True" to enable experimental vizualization features (not recommended)
 
-Edit lines 36-45 as you see fit. Comment out the embeddings you don't want (comment with the # sign) and uncomment the embeddings that you do want to use. Stuff closer to the top should be faster to run but worse at summarization (in general). You can mix and match any combination of embeddings (even your own finetuned embeddings). Personally, I've had a lot of success with "Law2Vec", a word2vec instance trained on a high quality legal corpus. Turns out lawyers are amazing at Summarizing debate evidence! 
+Edit lines 36-45 as you see fit to choose the embeddings. Comment out the embeddings you don't want (comment with the # sign) and uncomment the embeddings that you do want to use. Stuff closer to the top should be faster to run but worse at summarization (in general). You can mix and match any combination of embeddings (even your own finetuned embeddings). Personally, I've had a lot of success with "Law2Vec", a word2vec instance trained on a high quality legal corpus. Turns out lawyers are amazing at Summarizing debate evidence! 
+
+If you are using word level summarization, the integer which controlls the word window size is on line 303. I will soon update this to be a user configurable value. 
 
 For a list of supported embeddings, look for the tables [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_3_WORD_EMBEDDING.md) and [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md) from Flair 
 
 After you've selected the embeddings combination that you want. Flair will go and download the embeddings. Depending on the selected combination, these can take 4GB+ of diskspace, and will take up about that much RAM during execution.
 
-
 Upon first running cx_db8_flair.py, CX_DB8 will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". 
 
-It will then prompt you to add card text into CX_DB8 when Ctrl-D (Ctrl-Z + Enter for Windows) is pressed. Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. 
+If you'd like to run CX_DB8 on a file on disk, you can pass a "card_file_path" to it like so 
+
+```
+python3 cx_Db8_flair.py --card_file_path card_file_path.txt
+```
+
+If a file is not passed, CX_DB8 will then prompt you to add card text into CX_DB8 when Ctrl-D (Ctrl-Z + Enter for Windows) is pressed. 
+
+Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. 
 
 It will ask you what percentile that you want underlined and highlighted. this is user dependent based on the size of the summary. 
 
