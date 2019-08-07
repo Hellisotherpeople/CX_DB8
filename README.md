@@ -54,7 +54,9 @@ Edit lines 36-45 as you see fit to choose the embeddings. Comment out the embedd
 
 If you are using word level summarization, the integer which controlls the word window size is on line 303. I will soon update this to be a user configurable value. 
 
-For a list of supported embeddings, look for the tables [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_3_WORD_EMBEDDING.md) and [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md) from Flair 
+For a list of supported embeddings, look for the tables [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_3_WORD_EMBEDDING.md) and [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md) from Flair.
+
+UPDATE (Aug 7 2019), Flair just updated to support a bunch of new ultra modern embeddings. I *highly* recommend "XLnet" as its training mechanism (involving permutating the input) makes it especially useful for CX_DB8's word level summarization capabilities. 
 
 After you've selected the embeddings combination that you want. Flair will go and download the embeddings. Depending on the selected combination, these can take 4GB+ of diskspace, and will take up about that much RAM during execution.
 
