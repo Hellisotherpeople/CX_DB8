@@ -5,10 +5,24 @@ A contextual, queryable, token (or sentence or paragraph) extracting summarizer 
 
 # Table of Contents  
 * [Install Instructions](#install-instructions)
+* [Features](#Features)
 * [Usage Instructions](#usage-instructions)
 * [Examples](#Examples)  
 * [What is this?](#what-is-this)
 * [Future Plans](#what-are-your-plans)
+
+
+
+## Features
+
+* Worlds most flexible unsupervised extractive summarizer 
+* Queryable text-rank like Summarization 
+* Supports all modern word embedding architectures
+* Graphically visualize summaries with either first 3 vector components of model or a dimensionality reduction algorithim reducing original embedding to 3D. 
+Colors of each point reflect cosine similarity to query (red dot) 
+
+![]https://raw.githubusercontent.com/Hellisotherpeople/CX_DB8/master/cool_graph.gif
+
 
 
 ## Install Instructions
