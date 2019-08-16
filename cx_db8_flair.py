@@ -23,15 +23,25 @@ from torch.nn import CosineSimilarity
 from sty import fg, bg, ef, rs, RgbFg
 from sklearn.preprocessing import MinMaxScaler
 import syntok.segmenter as segmenter
+from ansi2html import Ansi2HTMLConverter
+
+conv = Ansi2HTMLConverter()
 
 document = Document() ## Create a python-docx document
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
 
 
-sent_level = False
-dynamic = True
+class bcolors:
+    HIGHLIGHT = '\33[43m'
+    END = '\033[0m'
+
+
+granularity_level = "Paragraph" #"Word" "Sent"
+dynamic = False
 graph = False
+word_doc = True 
+html = True
 doc_embeddings = []
 scores = []
 
@@ -106,7 +116,7 @@ def embed(card_tag, card_as_sentence, card_words, card_words_org):
     word_list = []
     token_removed_ct = 0
     card_tag_emb = card_tag.get_embedding()
-    if sent_level == False:
+    if granularity_level == "Word":
         for word, count in zip(card_words_org, range(0, len(card_words_org))):
             n_gram_word = card_words[count]
             stacked_embeddings.embed(n_gram_word)
@@ -140,7 +150,8 @@ def get_sim_scores(word_list):
 
 def run_loop(context, card, card_tag):
     list_of_sentences = []
-    if sent_level:
+    list_of_paragraphs = []
+    if granularity_level == "Sent":
         for paragraph in segmenter.analyze(card):
             for sentence in paragraph: ## sentence level summarization
                 set_str = ""
@@ -149,49 +160,67 @@ def run_loop(context, card, card_tag):
                     set_str += token.value
                 list_of_sentences.append(set_str)
         word_list = embed(card_tag, list_of_sentences, 0, 0)
-    else:
+    elif granularity_level == "Paragraph":
+        for paragraph in segmenter.analyze(card):
+            set_str = ""
+            for sentence in paragraph: ## sentence level summarization
+                #set_str = ""
+                for token in sentence:
+                    set_str += token.spacing
+                    set_str += token.value
+            list_of_paragraphs.append(set_str)
+        word_list = embed(card_tag, list_of_paragraphs, 0, 0)
+    elif granularity_level == "Word":
         card_as_sentence = Sentence(card)
         card_words, card_words_org = create_ngram(context, card, card_tag)
         word_list = embed(card_tag, card_as_sentence, card_words, card_words_org)
+    #print(word_list)
     return word_list
+
+
 
 def parse_word_val_list(word_list, h, n, val_list):
     sum_str = ""
+    html_str = ""
     removed_str = ""
     token_removed_ct = 0
     to_highlight = np.asarray([i for i in val_list if i > h])
     scaler = MinMaxScaler(feature_range = (20, 255))
     scaler.fit(to_highlight.reshape(-1, 1))
     for sum_word in word_list:
+        prev_word = "n"
         if float(sum_word[1]) > h:
             if dynamic:
-                bgnum = int(scaler.transform(sum_word[1].detach().numpy().reshape(-1, 1)))
+                bgnum = int(scaler.transform(sum_word[1].cpu().detach().numpy().reshape(-1, 1)))
             else:
                 bgnum = 50
+            html_str += ef.u + bcolors.HIGHLIGHT + sum_word[0] + " "
             sum_str += ef.u + bg(bgnum, bgnum, 0)
             runner = par.add_run(sum_word[0] + " ")
             runner.underline = True
             runner.bold = True
             sum_str += " ".join([str(sum_word[0]), rs.all])
         elif float(sum_word[1]) > n:
+            html_str += ef.u + sum_word[0] + " "
             sum_str += ef.u
             runner = par.add_run(sum_word[0] + " ")
             runner.underline = True
             sum_str += " ".join([str(sum_word[0]), rs.all])
         else:
+            html_str += sum_word[0] + " " + bcolors.END
             token_removed_ct += 1
             sum_str += str(sum_word[0])
             runner = par.add_run(sum_word[0] + " ")
             sum_str += " "
             removed_str += str(sum_word[0])
             removed_str += " "
-    return sum_str, removed_str, token_removed_ct
+    return sum_str, removed_str, token_removed_ct, html_str
 
 def new_sum(word_list, underline_p, highlight_p):
     val_list = summarize(word_list)
     th_underline = np.percentile(val_list, float(underline_p))
     th_highlight = np.percentile(val_list, float(highlight_p))
-    sum_str, removed_str, token_removed_ct = parse_word_val_list(word_list, th_highlight, th_underline, val_list)
+    sum_str, removed_str, token_removed_ct, t_html_str = parse_word_val_list(word_list, th_highlight, th_underline, val_list)
 
 
     print("CARD: ")
@@ -201,9 +230,12 @@ def new_sum(word_list, underline_p, highlight_p):
     print("GENERATED SUMMARY: ")
     print(sum_str)
     print("tokens removed:" + " " + str(token_removed_ct))
-    print("NOT UNDERLINED")
+    #print(conv.convert(sum_str))
+    if html:
+        #print(conv.convert(t_html_str))
+        with open("cx_html.html", "a") as hf:
+            hf.write(conv.convert(t_html_str))
 
-    print(removed_str)
 
 
 
@@ -323,7 +355,8 @@ for i in range(0, 1000):
             visualize3DData(gph)
             '''
     else:
-        document.save('test_sum.docx')
+        if word_doc:
+            document.save('test_sum.docx')
         break
 
 
