@@ -4,8 +4,8 @@
 A contextual, queryable, token (or sentence or paragraph) extracting summarizer designed from the ground up by a former debater for debaters 
 
 # Table of Contents  
-* [Install Instructions](#install-instructions)
 * [Features](#Features)
+* [Install Instructions](#install-instructions)
 * [Usage Instructions](#usage-instructions)
 * [Examples](#Examples)  
 * [What is this?](#what-is-this)
