@@ -2,9 +2,8 @@ import argparse
 import flair
 from flair.data import Sentence
 from flair.models import SequenceTagger
-from flair.embeddings import WordEmbeddings, FlairEmbeddings, StackedEmbeddings, DocumentPoolEmbeddings, BertEmbeddings, ELMoEmbeddings, OpenAIGPTEmbeddings, TransformerXLEmbeddings
+from flair.embeddings import WordEmbeddings, FlairEmbeddings, StackedEmbeddings, DocumentPoolEmbeddings, BertEmbeddings, ELMoEmbeddings, OpenAIGPTEmbeddings, TransformerXLEmbeddings, XLNetEmbeddings
 import torch
-# create a StackedEmbedding object that combines glove and forward/backward flair embeddings
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import jaccard_similarity_score
 #import numpy as np
@@ -14,9 +13,9 @@ import numpy as np
 from itertools import islice
 from collections import deque
 import matplotlib 
-import umap
+#import umap ##only necessary for weird experiments
 import matplotlib.pyplot as plt
-import seaborn as sns
+#import seaborn as sns ##only necessary for weird experiments
 from mpl_toolkits.mplot3d import proj3d
 import matplotlib.cm as cm
 from torch.nn import CosineSimilarity
@@ -24,6 +23,7 @@ from sty import fg, bg, ef, rs, RgbFg
 from sklearn.preprocessing import MinMaxScaler
 import syntok.segmenter as segmenter
 from ansi2html import Ansi2HTMLConverter
+import text_graph 
 
 conv = Ansi2HTMLConverter()
 
@@ -32,21 +32,24 @@ cos = CosineSimilarity(dim=1, eps=1e-6)
 
 
 
-class bcolors:
+class bcolors: #For converting the ANSI string to HTML - Sty is not supported well :(
     HIGHLIGHT = '\33[43m'
     END = '\033[0m'
 
 
-granularity_level = "Paragraph" #"Word" "Sent"
-dynamic = False
-graph = False
+granularity_level = "Sent" #"Word" "Sent" "Paragraph"
+dynamic = False  ##Controls if we highlight the more important words more or not
+graph = False ###ONLY WORKS WITH "Word" granularity_level
 word_doc = True 
 html = True
+word_window_size = 10 ##This is really doubled since it's Bi-directional. Only matters for word level granularity
+highlight_color_intensity = 175 # try values between 25 and 200
 doc_embeddings = []
 scores = []
 
 stacked_embeddings = DocumentPoolEmbeddings([
-                                        WordEmbeddings('en'),
+                                        #WordEmbeddings('en'),
+                                        XLNetEmbeddings('xlnet-large-cased', use_scalar_mix = 'True')
                                         #WordEmbeddings('glove'),
                                         #WordEmbeddings('extvec'),#ELMoEmbeddings('original'),
                                         #BertEmbeddings('bert-base-cased'),
@@ -122,12 +125,12 @@ def embed(card_tag, card_as_sentence, card_words, card_words_org):
             stacked_embeddings.embed(n_gram_word)
             n_gram_emb = n_gram_word.get_embedding()
             if graph:
-                doc_embeddings.append(n_gram_emb.numpy())
+                doc_embeddings.append(n_gram_emb.cpu().detach().numpy())
             word_sim = cos(card_tag_emb.reshape(1,-1), n_gram_emb.reshape(1, -1))
             word_tup = (card_words_org[count], word_sim) #card_words_org[count]
             word_list.append(word_tup)
         if graph:
-            doc_embeddings.append(card_tag_emb.numpy())
+            doc_embeddings.append(card_tag_emb.cpu().detach().numpy())
         print(len(word_list))
         print(len(card_words))
         print(len(card_words_org))
@@ -193,7 +196,7 @@ def parse_word_val_list(word_list, h, n, val_list):
             if dynamic:
                 bgnum = int(scaler.transform(sum_word[1].cpu().detach().numpy().reshape(-1, 1)))
             else:
-                bgnum = 50
+                bgnum = highlight_color_intensity
             html_str += ef.u + bcolors.HIGHLIGHT + sum_word[0] + " "
             sum_str += ef.u + bg(bgnum, bgnum, 0)
             runner = par.add_run(sum_word[0] + " ")
@@ -239,84 +242,6 @@ def new_sum(word_list, underline_p, highlight_p):
 
 
 
-"--------------------------------------- Vizualization code below this line ----------------------"
-
-def visualize3DData (X):
-    """Visualize data in 3d plot with popover next to mouse position.
-
-    Args:
-        X (np.array) - array of points, of shape (numPoints, 3)
-    Returns:
-        None
-    """
-    fig = plt.figure(figsize = (16,10))
-    ax = fig.add_subplot(111, projection = '3d')
-    im = ax.scatter(X[:, 0], X[:, 1], X[:, 2], c = np.asarray(scores), depthshade = False, picker = True, s=30, cmap = "rainbow")
-    fig.colorbar(im)
-
-
-    def distance(point, event):
-        """Return distance between mouse position and given data point
-
-        Args:
-            point (np.array): np.array of shape (3,), with x,y,z in data coords
-            event (MouseEvent): mouse event (which contains mouse position in .x and .xdata)
-        Returns:
-            distance (np.float64): distance (in screen coords) between mouse pos and data point
-        """
-        assert point.shape == (3,), "distance: point.shape is wrong: %s, must be (3,)" % point.shape
-
-        # Project 3d data space to 2d data space
-        x2, y2, _ = proj3d.proj_transform(point[0], point[1], point[2], plt.gca().get_proj())
-        # Convert 2d data space to 2d screen space
-        x3, y3 = ax.transData.transform((x2, y2))
-
-        return np.sqrt ((x3 - event.x)**2 + (y3 - event.y)**2)
-
-
-    def calcClosestDatapoint(X, event):
-        """"Calculate which data point is closest to the mouse position.
-
-        Args:
-            X (np.array) - array of points, of shape (numPoints, 3)
-            event (MouseEvent) - mouse event (containing mouse position)
-        Returns:
-            smallestIndex (int) - the index (into the array of points X) of the element closest to the mouse position
-        """
-        distances = [distance (X[i, 0:3], event) for i in range(X.shape[0])]
-        return np.argmin(distances)
-
-
-    def annotatePlot(X, index):
-        """Create popover label in 3d chart
-
-        Args:
-            X (np.array) - array of points, of shape (numPoints, 3)
-            index (int) - index (into points array X) of item which should be printed
-        Returns:
-            None
-        """
-        # If we have previously displayed another label, remove it first
-        if hasattr(annotatePlot, 'label'):
-            annotatePlot.label.remove()
-        # Get data point from array of points X, at position index
-        x2, y2, _ = proj3d.proj_transform(X[index, 0], X[index, 1], X[index, 2], ax.get_proj())
-        annotatePlot.label = plt.annotate(word_list[index][0][0:100],
-            xy = (x2, y2), xytext = (-10, 10), textcoords = 'offset points', ha = 'left', va = 'bottom', size = 6,
-            bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5),
-            arrowprops = dict(arrowstyle = '->'))
-        fig.canvas.draw()
-
-
-    def onMouseMotion(event):
-        """Event that is triggered when mouse is moved. Shows text annotation over data point closest to mouse."""
-        closestIndex = calcClosestDatapoint(X, event)
-        annotatePlot (X, closestIndex)
-
-    fig.canvas.mpl_connect('motion_notify_event', onMouseMotion)  # on mouse motion
-    plt.show()
-
-
 
 for i in range(0, 1000):
     args = arg_parser()
@@ -332,11 +257,16 @@ for i in range(0, 1000):
         a_par.add_run(card_auth).bold = True
         c_par = document.add_paragraph(card_cite)
         par = document.add_paragraph()
-        word_list = run_loop(10, card, card_tag)
+        word_list = run_loop(word_window_size, card, card_tag)
         if graph:
-            plt.figure(figsize=(15,1))
-            sns.heatmap(doc_embeddings[0:20], robust = True, linewidths=0.7, cmap="PiYG")
-            plt.show()
+            #plt.figure(figsize=(15,1))
+            #sns.heatmap(doc_embeddings[0:20], robust = True, linewidths=0.7, cmap="PiYG")
+            #plt.show()
+            gph = np.array([doc_embeddings[k][0:3].tolist() for k in range(0, len(doc_embeddings))])
+            word_list.append(('CARD_TAG', 1.0))
+            scores = get_sim_scores(word_list)
+            #scores.append(1.0) #to account for the query string)
+            text_graph.visualize3DData(gph, scores, word_list)
 
             '''
             #umap_emb = reducer.fit_transform(doc_embeddings) ##if we want to fit with the card tag, maybe not as interesting
@@ -348,12 +278,6 @@ for i in range(0, 1000):
             scores.append(1.0) #to account for the query string)
             '''
         new_sum(word_list, underline_p, highlight_p)
-
-        if graph:
-            '''
-            word_list.append(('CARD_TAG', 1.0))
-            visualize3DData(gph)
-            '''
     else:
         if word_doc:
             document.save('test_sum.docx')
