@@ -21,8 +21,10 @@ A contextual, queryable, token (or sentence or paragraph) extracting summarizer 
 * Outputs underlined and highlighted summary in terminal, docx, and HTML
 * Graphically visualize summaries with either first 3 vector components of model or a dimensionality reduction algorithim reducing original embedding to 3D. 
 Colors of each point reflect cosine similarity to query (red dot) 
+
 (UMAP) 
 ![](https://raw.githubusercontent.com/Hellisotherpeople/CX_DB8/master/cool_graph_2.gif)
+
 (Raw vector components) 
 ![](https://raw.githubusercontent.com/Hellisotherpeople/CX_DB8/master/cool_graph.gif)
 
