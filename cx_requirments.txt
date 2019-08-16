@@ -1,4 +1,0 @@
-flair
-sklearn
-python-docx
-numpy
