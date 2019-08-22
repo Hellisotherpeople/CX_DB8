@@ -17,7 +17,7 @@ A contextual, queryable, token (or sentence or paragraph) extracting summarizer 
 
 * Worlds most flexible unsupervised extractive summarizer / semantic search engine
 * Queryable text-rank like Summarization for words, sentences, or paragraphs. (Char level and ngram level on the way)
-* Supports all any combination of modern word embedding architectures 
+* Supports any combination of modern word embedding architectures 
 * Outputs underlined and highlighted summary in terminal, docx, and HTML
 * Graphically visualize summaries with either first 3 vector components of model or a dimensionality reduction algorithim reducing original embedding to 3D. 
 Colors of each point reflect cosine similarity to query (red dot) 
