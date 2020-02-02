@@ -1,6 +1,7 @@
 # CX_DB8
 
-[Version 0.01 Website Here](https://www.nlpsearch.io/)
+100 Stars - 2/1/2019 
+Thank you for all the support!
 
 
 ![GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg) ![License](https://img.shields.io/github/license/Hellisotherpeople/CX_DB8.svg) ![Contributors](https://img.shields.io/github/contributors/Hellisotherpeople/CX_DB8.svg) ![Commit](https://img.shields.io/github/last-commit/Hellisotherpeople/CX_DB8.svg)
