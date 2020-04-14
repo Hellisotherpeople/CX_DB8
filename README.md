@@ -6,7 +6,7 @@ Thank you for all the support!
 BTW: Someone has a notebook with CX_DB8 working for those who don't want to go through the installation or deal with version mismatches due to me no longer updating this repo. It's available [here](https://notebooks.azure.com/TheDubNY/projects/NLP1/html/Flair%20and%20summarization.ipynb)
 
 
-![GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg) ![License](https://img.shields.io/github/license/Hellisotherpeople/CX_DB8.svg) ![Contributors](https://img.shields.io/github/contributors/Hellisotherpeople/CX_DB8.svg) ![Commit](https://img.shields.io/github/last-commit/Hellisotherpeople/CX_DB8.svg)
+![GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg) ![License](https://img.shields.io/github/license/Hellisotherpeople/CX_DB8.svg) ![Commit](https://img.shields.io/github/last-commit/Hellisotherpeople/CX_DB8.svg)
 
 A contextual, queryable, token (or sentence or paragraph) extracting summarizer designed from the ground up by a former debater for debaters 
 
