@@ -3,7 +3,7 @@ ansi2html==1.5.2
 matplotlib==3.0.3
 bpemb==0.2.11
 hyperopt==0.1.2
-tensorflow_gpu==1.14.0
+tensorflow_gpu==2.3.1
 segtok==1.5.7
 gensim==3.7.3
 pytest==4.6.1
