@@ -1,5 +1,7 @@
 # CX_DB8
 
+UPDATE: A webapp version of this which implements most of the functionality in CX_DB8 is available here: https://huggingface.co/spaces/Hellisotherpeople/Unsupervised_Extractive_Summarization
+
 100 Stars - 2/1/2019 
 Thank you for all the support!
 
