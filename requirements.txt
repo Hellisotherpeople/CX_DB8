@@ -20,7 +20,7 @@ Deprecated==1.2.5
 seaborn==0.9.0
 typing==3.7.4
 sty==1.0.0b11
-numpy==1.16.2
+numpy==1.22.0
 torch==1.1.0
 requests==2.22.0
 pandas==0.24.2
