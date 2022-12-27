@@ -10,7 +10,7 @@ pytest==4.6.1
 tqdm==4.31.1
 umap_learn==0.3.8
 langdetect==1.0.7
-setuptools==41.0.1
+setuptools==65.5.1
 python_docx==0.8.10
 scipy==1.2.1
 syntok==1.2.1
