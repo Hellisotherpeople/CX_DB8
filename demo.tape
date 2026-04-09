@@ -1,7 +1,7 @@
 # CX_DB8 Demo Recording
 # Run with: vhs demo.tape
 
-Output assets/demo.gif
+Output assets/demo_v2.gif
 
 Set Shell "zsh"
 Set FontSize 14

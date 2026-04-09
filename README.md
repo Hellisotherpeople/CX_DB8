@@ -8,7 +8,7 @@
 
 CX_DB8 uses modern sentence embeddings to find the most relevant words, sentences, or paragraphs in a document relative to a query. It highlights and underlines text by semantic similarity, producing beautiful terminal output, Word documents, HTML, and SVG exports.
 
-![CX_DB8 Demo](assets/demo.gif)
+![CX_DB8 Demo](assets/demo_v2.gif)
 
 ## Features
 
@@ -135,7 +135,7 @@ uv pip install cx-db8[viz]
 cx-db8 run -f card.txt -q "query" --viz
 ```
 
-![Help and Models](assets/help.gif)
+![Help and Models](assets/help_v2.gif)
 
 ## How It Works
 

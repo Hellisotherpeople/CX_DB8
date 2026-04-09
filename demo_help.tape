@@ -1,7 +1,7 @@
 # CX_DB8 Help & Models Recording
 # Run with: vhs demo_help.tape
 
-Output assets/help.gif
+Output assets/help_v2.gif
 
 Set Shell "zsh"
 Set FontSize 14
