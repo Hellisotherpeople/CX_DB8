@@ -24,16 +24,25 @@ THEME_TITLE = "bold magenta"
 def render_summary(result: SummaryResult, console: Console | None = None) -> Text:
     """Render a summarized card as Rich Text with highlights and underlines."""
     text = Text()
-    sep = " " if result.granularity.value == "word" else "\n\n"
 
-    for span in result.spans:
-        if span.score >= result.highlight_threshold:
-            text.append(span.text, style=THEME_HIGHLIGHT)
-        elif span.score >= result.underline_threshold:
-            text.append(span.text, style=THEME_UNDERLINE)
-        else:
-            text.append(span.text, style=THEME_REMOVED)
-        text.append(sep)
+    if result.granularity.value in ("phrase", "word"):
+        for span in result.spans:
+            if span.score >= result.highlight_threshold:
+                text.append(span.text, style=THEME_HIGHLIGHT)
+            elif span.score >= result.underline_threshold:
+                text.append(span.text, style=THEME_UNDERLINE)
+            else:
+                text.append(span.text, style=THEME_REMOVED)
+            text.append(" ")
+    else:
+        for span in result.spans:
+            if span.score >= result.highlight_threshold:
+                text.append(span.text, style=THEME_HIGHLIGHT)
+            elif span.score >= result.underline_threshold:
+                text.append(span.text, style=THEME_UNDERLINE)
+            else:
+                text.append(span.text, style=THEME_REMOVED)
+            text.append("\n\n")
 
     return text
 

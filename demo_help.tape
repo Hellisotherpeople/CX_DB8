@@ -11,10 +11,10 @@ Set Theme "Catppuccin Mocha"
 Set Padding 20
 Set TypingSpeed 40ms
 
-Type "cx-db8 --help"
+Type "uv run cx-db8 --help"
 Enter
 Sleep 3s
 
-Type "cx-db8 models"
+Type "uv run cx-db8 models"
 Enter
 Sleep 4s

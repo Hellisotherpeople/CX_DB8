@@ -161,6 +161,37 @@ class TestSummarize:
         )
         assert len(result.spans) == len(text.split())
 
+    def test_phrase_summarization_bridges_gaps(self, embedder):
+        text = "The SETI program searches for alien signals from outer space"
+        result = summarize(
+            card_text=text,
+            query="alien signal detection",
+            embedder=embedder,
+            granularity=Granularity.PHRASE,
+            underline_percentile=50,
+            highlight_percentile=80,
+            word_window_size=3,
+            bridge_gap_size=3,
+        )
+        # All original words should still be present (extractive — nothing removed)
+        original_words = text.split()
+        result_words = [s.text for s in result.spans]
+        assert result_words == original_words
+        # Phrase mode should have at least as many underlined words as word mode
+        # because gap-bridging promotes function words to underline
+        word_result = summarize(
+            card_text=text,
+            query="alien signal detection",
+            embedder=embedder,
+            granularity=Granularity.WORD,
+            underline_percentile=50,
+            highlight_percentile=80,
+            word_window_size=3,
+        )
+        phrase_kept = len(result.highlighted) + len(result.underlined)
+        word_kept = len(word_result.highlighted) + len(word_result.underlined)
+        assert phrase_kept >= word_kept
+
     def test_paragraph_summarization(self, embedder):
         text = "First paragraph about science.\n\nSecond about cooking.\n\nThird about science again."
         result = summarize(

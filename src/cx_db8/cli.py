@@ -92,8 +92,12 @@ def run(
     ] = DEFAULT_MODEL,
     word_window: Annotated[
         int,
-        typer.Option("--word-window", "-w", help="Word-level context window size."),
+        typer.Option("--word-window", "-w", help="Word/phrase-level context window size."),
     ] = 10,
+    bridge_gap: Annotated[
+        int,
+        typer.Option("--bridge-gap", "-b", help="Max gap to bridge in phrase mode (keeps grammar)."),
+    ] = 3,
     output_docx: Annotated[
         Optional[Path],
         typer.Option("--docx", help="Export summary as Word document."),
@@ -166,6 +170,7 @@ def run(
             underline_percentile=underline,
             highlight_percentile=highlight,
             word_window_size=word_window,
+            bridge_gap_size=bridge_gap,
             want_embeddings=visualize,
         )
 
@@ -398,7 +403,7 @@ def demo() -> None:
     with console.status("[bold cyan]Loading embedding model...", spinner="dots"):
         embedder = Embedder()
 
-    for gran in [Granularity.SENTENCE, Granularity.WORD]:
+    for gran in [Granularity.SENTENCE, Granularity.PHRASE]:
         with console.status(
             f"[bold cyan]Summarizing at {gran.value} level...", spinner="dots"
         ):

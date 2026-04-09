@@ -14,6 +14,7 @@ from cx_db8.embeddings import Embedder
 
 class Granularity(str, Enum):
     WORD = "word"
+    PHRASE = "phrase"
     SENTENCE = "sentence"
     PARAGRAPH = "paragraph"
 
@@ -100,6 +101,49 @@ def _create_word_ngrams(words: list[str], window_size: int) -> list[str]:
     return ngrams
 
 
+def _bridge_gaps(
+    words: list[str],
+    scores: NDArray[np.float64],
+    ul_thresh: float,
+    bridge_size: int = 3,
+) -> list[ScoredSpan]:
+    """Score words then bridge small gaps so underlined text reads grammatically.
+
+    All words are kept (this is strictly extractive). After classifying each
+    word as kept (above underline threshold) or not, any run of below-threshold
+    words that is <= bridge_size tokens *and* sits between two kept words gets
+    promoted to the underline threshold so that grammatical connectors
+    (articles, prepositions, conjunctions) are preserved when reading only the
+    underlined/highlighted portions.
+    """
+    n = len(words)
+    promoted = np.array(scores, dtype=np.float64)
+
+    # Identify which words are "kept" (at or above underline threshold)
+    kept = promoted >= ul_thresh
+
+    # Bridge small gaps between kept words
+    i = 0
+    while i < n:
+        if not kept[i]:
+            # Find extent of this below-threshold run
+            j = i
+            while j < n and not kept[j]:
+                j += 1
+            gap_len = j - i
+            # Promote if bounded by kept words on both sides and small enough
+            has_left = i > 0 and kept[i - 1]
+            has_right = j < n and kept[j]
+            if has_left and has_right and gap_len <= bridge_size:
+                for k in range(i, j):
+                    promoted[k] = ul_thresh  # promote to underline level
+            i = j
+        else:
+            i += 1
+
+    return [ScoredSpan(text=w, score=float(s)) for w, s in zip(words, promoted)]
+
+
 def summarize(
     card_text: str,
     query: str,
@@ -108,6 +152,7 @@ def summarize(
     underline_percentile: float = 70.0,
     highlight_percentile: float = 85.0,
     word_window_size: int = 10,
+    bridge_gap_size: int = 3,
     want_embeddings: bool = False,
 ) -> SummaryResult:
     """Run extractive summarization on card text.
@@ -117,10 +162,11 @@ def summarize(
         query: The card tag / query to summarize in terms of.
                 If empty, summarizes in terms of the card itself.
         embedder: The embedding engine to use.
-        granularity: Word, sentence, or paragraph level.
+        granularity: Word, phrase, sentence, or paragraph level.
         underline_percentile: Percentile threshold for underlining (0-100).
         highlight_percentile: Percentile threshold for highlighting (0-100).
-        word_window_size: Bi-directional context window for word-level n-grams.
+        word_window_size: Bi-directional context window for word/phrase n-grams.
+        bridge_gap_size: Max removed words to bridge in phrase mode (default 3).
         want_embeddings: If True, return the raw embeddings for visualization.
 
     Returns:
@@ -128,7 +174,7 @@ def summarize(
     """
     effective_query = query if query else card_text
 
-    if granularity == Granularity.WORD:
+    if granularity in (Granularity.WORD, Granularity.PHRASE):
         words = card_text.split()
         ngrams = _create_word_ngrams(words, word_window_size)
         if want_embeddings:
@@ -136,7 +182,31 @@ def summarize(
         else:
             scores = embedder.similarity(effective_query, ngrams)
             embs = None
-        spans = [ScoredSpan(text=w, score=float(s)) for w, s in zip(words, scores)]
+
+        # Compute thresholds first (on raw word scores)
+        all_scores_list = [float(s) for s in scores]
+        if len(all_scores_list) < 2:
+            ul_thresh = hl_thresh = 0.0
+        else:
+            ul_thresh = float(np.percentile(all_scores_list, underline_percentile))
+            hl_thresh = float(np.percentile(all_scores_list, highlight_percentile))
+
+        if granularity == Granularity.PHRASE:
+            spans = _bridge_gaps(words, scores, ul_thresh, bridge_gap_size)
+        else:
+            spans = [ScoredSpan(text=w, score=float(s)) for w, s in zip(words, scores)]
+
+        return SummaryResult(
+            card_text=card_text,
+            query=effective_query,
+            granularity=granularity,
+            spans=spans,
+            underline_percentile=underline_percentile,
+            highlight_percentile=highlight_percentile,
+            underline_threshold=ul_thresh,
+            highlight_threshold=hl_thresh,
+            embeddings=embs,
+        )
 
     elif granularity == Granularity.SENTENCE:
         sentences = _segment_sentences(card_text)

@@ -12,7 +12,7 @@ CX_DB8 uses modern sentence embeddings to find the most relevant words, sentence
 
 ## Features
 
-- **Three granularity levels** — word, sentence, or paragraph extraction
+- **Four granularity levels** — phrase, word, sentence, or paragraph extraction
 - **Any sentence-transformer model** — swap models with a single flag
 - **Beautiful Rich TUI** — styled terminal output with panels, tables, and color-coded highlights
 - **Multiple exports** — Word (.docx), HTML, and SVG output formats
@@ -69,12 +69,17 @@ cx-db8 run
 # Sentence level (default) — best for most use cases
 cx-db8 run -f card.txt -q "hegemony decline" -g sentence
 
-# Word level — token-level extraction with context windows
+# Phrase level — word-level scoring with grammatical bridging
+cx-db8 run -f card.txt -q "hegemony decline" -g phrase
+
+# Word level — raw token-level extraction with context windows
 cx-db8 run -f card.txt -q "hegemony decline" -g word
 
 # Paragraph level — coarse-grained extraction
 cx-db8 run -f card.txt -q "hegemony decline" -g paragraph
 ```
+
+**Phrase mode** is the sweet spot between word and sentence: it scores each word individually (with contextual n-gram windows), then bridges small gaps between important words so that the underlined/highlighted portions read as grammatical phrases instead of isolated tokens. Use `--bridge-gap N` to control how many filler words get absorbed (default 3).
 
 ### Control thresholds
 
@@ -142,15 +147,15 @@ CX_DB8 is an **unsupervised extractive summarizer** that works by computing sema
 4. **Score each span** by cosine similarity to the query vector
 5. **Threshold** using percentile-based cutoffs to determine what gets highlighted, underlined, or removed
 
-For **word-level** summarization, each word is embedded along with its surrounding context window (default ±10 words), preserving contextual meaning rather than treating each word in isolation.
+For **word** and **phrase-level** summarization, each word is embedded along with its surrounding context window (default ±10 words), preserving contextual meaning rather than treating each word in isolation. **Phrase mode** additionally bridges small gaps (default ≤3 words) between kept words, promoting function words like articles and prepositions so the underlined text reads grammatically.
 
 ### Sentence-Level Summary
 
 <img src="assets/sentence_summary.svg" alt="Sentence-level summary" width="700">
 
-### Word-Level Summary
+### Phrase-Level Summary
 
-<img src="assets/word_summary.svg" alt="Word-level summary" width="700">
+<img src="assets/phrase_summary.svg" alt="Phrase-level summary" width="700">
 
 ## Configuration
 
@@ -160,11 +165,12 @@ All settings are available as CLI flags. Run `cx-db8 run --help` for full docume
 |------|---------|-------------|
 | `-f, --file` | stdin | Input text file |
 | `-q, --query` | interactive | Card tag / query |
-| `-g, --granularity` | sentence | word, sentence, or paragraph |
+| `-g, --granularity` | sentence | phrase, word, sentence, or paragraph |
 | `-u, --underline` | 70 | Underline percentile (1-99) |
 | `-H, --highlight` | 85 | Highlight percentile (1-99) |
 | `-m, --model` | all-MiniLM-L6-v2 | Sentence-transformer model |
-| `-w, --word-window` | 10 | Context window for word-level |
+| `-w, --word-window` | 10 | Context window for word/phrase level |
+| `-b, --bridge-gap` | 3 | Max gap to bridge in phrase mode |
 | `--docx` | — | Export as Word document |
 | `--html` | — | Export as HTML |
 | `--svg` | — | Export as SVG screenshot |
