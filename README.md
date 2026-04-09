@@ -1,195 +1,202 @@
 # CX_DB8
 
-UPDATE: A webapp version of this which implements most of the functionality in CX_DB8 is available here: https://huggingface.co/spaces/Hellisotherpeople/Unsupervised_Extractive_Summarization
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![uv](https://img.shields.io/badge/uv-package%20manager-blueviolet)](https://docs.astral.sh/uv/)
 
-100 Stars - 2/1/2019 
-Thank you for all the support!
+**Unsupervised, contextual, extractive summarizer** built for competitive debate evidence — and useful for any document.
 
-BTW: Someone has a notebook with CX_DB8 working for those who don't want to go through the installation or deal with version mismatches due to me no longer updating this repo. It's available [here](https://notebooks.azure.com/TheDubNY/projects/NLP1/html/Flair%20and%20summarization.ipynb)
+CX_DB8 uses modern sentence embeddings to find the most relevant words, sentences, or paragraphs in a document relative to a query. It highlights and underlines text by semantic similarity, producing beautiful terminal output, Word documents, HTML, and SVG exports.
 
-
-![GitHub Issues](https://img.shields.io/github/issues-raw/Hellisotherpeople/CX_DB8.svg) ![License](https://img.shields.io/github/license/Hellisotherpeople/CX_DB8.svg) ![Commit](https://img.shields.io/github/last-commit/Hellisotherpeople/CX_DB8.svg)
-
-A contextual, queryable, token (or sentence or paragraph) extracting summarizer designed from the ground up by a former debater for debaters 
-
-# Table of Contents  
-* [Features](#Features)
-* [Install Instructions](#install-instructions)
-* [Usage Instructions](#usage-instructions)
-* [Examples](#Examples)  
-* [What is this?](#what-is-this)
-* [Future Plans](#what-are-your-plans)
-
-
+![CX_DB8 Demo](assets/demo.gif)
 
 ## Features
 
-* Worlds most flexible unsupervised extractive summarizer / semantic search engine
-* Queryable text-rank like Summarization for words, sentences, or paragraphs. (Char level and ngram level on the way)
-* Supports any combination of modern word embedding architectures 
-* Outputs underlined and highlighted summary in terminal, docx, and HTML
-* Graphically visualize summaries with either first 3 vector components of model or a dimensionality reduction algorithim reducing original embedding to 3D. 
-Colors of each point reflect cosine similarity to query (red dot) 
+- **Three granularity levels** — word, sentence, or paragraph extraction
+- **Any sentence-transformer model** — swap models with a single flag
+- **Beautiful Rich TUI** — styled terminal output with panels, tables, and color-coded highlights
+- **Multiple exports** — Word (.docx), HTML, and SVG output formats
+- **Interactive mode** — process multiple cards in sequence, save all to one document
+- **3D visualization** — explore the embedding space with interactive matplotlib + UMAP plots
+- **Fast** — default model runs on CPU in seconds, no GPU required
 
-(UMAP) 
-![](https://raw.githubusercontent.com/Hellisotherpeople/CX_DB8/master/cool_graph_2.gif)
+## Quick Start
 
-(Raw vector components) 
-![](https://raw.githubusercontent.com/Hellisotherpeople/CX_DB8/master/cool_graph.gif)
+### Install with UV (recommended)
 
-
-
-## Install Instructions
-
-
-1. Confirm that you have Python 3.6+ (Should come preinstalled in a modern Linux install, may need to install on Windows). Open a terminal and Type "python" or "python3" (if python2 comes up), and take note of which version of Python 3 you have. 
-
-2. Confirm that you have "pip" (The python package manager). usually a simple "pip" or "pip3" will confirm if you have it or not. If this is not present, it can be installed via apt-get (for ubuntu users) 
-
-3. Install [PyTorch](https://pytorch.org/). The install instructions are quite easy - you'll want to install the "pip" package, correponding to your Python version. Advanced users who want to take advantage of their GPU and who have installed CUDA and CUDNN can select their corresponding CUDA version - but most users will want to select "None". Finally, PyTorch will generate a one line command. A user with Python 3.7 and not using cuda would run this command: 
-  ```
-  pip3 install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
-  pip3 install torchvision
-  ```
-4. move to your favorite empty directory, and clone CX_DB8 into that directory 
+```bash
+uv tool install git+https://github.com/Hellisotherpeople/CX_DB8.git
 ```
+
+Or clone and install locally:
+
+```bash
 git clone https://github.com/Hellisotherpeople/CX_DB8.git
 cd CX_DB8
-pip3 install -r requirments.txt
+uv sync
 ```
 
-5. It's installed! You should be ready to cx_db8 this from the command line with a 
-```
-python3 -i cx_db8_flair.py
-```
+### Install with pip
 
-
-## Usage Instructions
-
-Sorry, but right now I don't have a good configuration setting abstraction - so you need to edit the source code to change settings. Don't worry, it's not hard 
-First, open up cx_db8_flair.py in your favorite text editor
-```
-vim cx_db8_flair.py
+```bash
+pip install git+https://github.com/Hellisotherpeople/CX_DB8.git
 ```
 
-Change line 31 to "True" if you'd like grammatically correct, sentence level, summarization
+### Run the demo
 
-Change line 32 to "True" if you'd like to see "Dynamic" highlights of your embeddings (brightness changes based on "importance"), False is like the bottom examples picture.  
-
-Change line 33 to "True" to enable experimental vizualization features (not recommended)
-
-Edit lines 36-45 as you see fit to choose the embeddings. Comment out the embeddings you don't want (comment with the # sign) and uncomment the embeddings that you do want to use. Stuff closer to the top should be faster to run but worse at summarization (in general). You can mix and match any combination of embeddings (even your own finetuned embeddings). Personally, I've had a lot of success with "Law2Vec", a word2vec instance trained on a high quality legal corpus. Turns out lawyers are amazing at Summarizing debate evidence! 
-
-If you are using word level summarization, the integer which controlls the word window size is on line 303. I will soon update this to be a user configurable value. 
-
-For a list of supported embeddings, look for the tables [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_3_WORD_EMBEDDING.md) and [here](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md) from Flair.
-
-UPDATE (Aug 7 2019), Flair just updated to support a bunch of new ultra modern embeddings. I *highly* recommend "XLnet" as its training mechanism (involving permutating the input) makes it especially useful for CX_DB8's word level summarization capabilities. 
-
-After you've selected the embeddings combination that you want. Flair will go and download the embeddings. Depending on the selected combination, these can take 4GB+ of diskspace, and will take up about that much RAM during execution.
-
-Upon first running cx_db8_flair.py, CX_DB8 will prompt you with a screen asking you to continue. Press "y" or it will end execution, and save any summaries found to "test_sum.docx". 
-
-If you'd like to run CX_DB8 on a file on disk, you can pass a "card_file_path" to it like so 
-
-```
-python3 cx_Db8_flair.py --card_file_path card_file_path.txt
+```bash
+cx-db8 demo
 ```
 
-If a file is not passed, CX_DB8 will then prompt you to add card text into CX_DB8 when Ctrl-D (Ctrl-Z + Enter for Windows) is pressed. 
+## Usage
 
-Then it will ask for a card tag, or allow the user to give a "generic" summary by entering -1. 
+### Basic summarization
 
-It will ask you what percentile that you want underlined and highlighted. this is user dependent based on the size of the summary. 
+```bash
+# From a file
+cx-db8 run --file evidence.txt --query "nuclear war causes extinction"
 
-It will then prompty for a card author and date, and then the citation. This is only relavent for the creation of the word document. After all of this are entered, the summary is generated and the prompt will ask you to either continue execution with a "y" or to end exeuction. 
+# Pipe text in
+cat evidence.txt | cx-db8 run --query "economic collapse"
 
-Depending on the paramaters chosen, summarization may take a long time (more accurate) or be nearly instant. 
-
-Please submit issues for help with installation or running cx_db8 here with the issue tracker. 
-
-
-## Examples
-**Settings used: FastText, underline top 70%, highlight top 65%, brighter = more important. All highlights are more important than only underlined**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/cxdb8pic.JPG)
-
-**Card tag given: "Humanity is an abstraction".**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer.JPG)
-
-**It supports sentence level summarization!**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/sentence_level.png)
-
-
-**And now, it also generates word docs!!**
-
-![](https://github.com/Hellisotherpeople/CX_DB8/blob/master/Summarizer2.JPG)
-
-
-## UPDATE 3/30/2019
-
-
-I finally got fed up with trying to experiment with supervised summarization systems. Thanks to the magical folks at Google for creating the unsupervised ["Universal Sentence Encoder"](https://tfhub.dev/google/universal-sentence-encoder/2) which is more rightly called the "Universal Text Encoder" given how smoothly it works on Words, Sentences, or even whole Documents. 
-
-Also, high school debators are really quite bad at properly summarizing debate documents. Garbage in - Garbage out when it came to Supervised Learning methods. 
-
-So, I enlist the help of the wikipedia pre-trained Universal Sentence Encoder to create the (to my knowledge) **worlds first contextual token-level extractive summarizer.**
-
-
-It works by first computing the "meaning" of the card tag, which can be anything. Then, it goes through every word in the actual card. Now, here, I could just compute the meaning of the individual word like "The" = 0.11 and "Person" = 0.12, but that doesn't include the context of the other words around it. 
-
-So, instead I take N words before and after the string, and use those to compute the meaning of the N gram generated for each word. The first word only includes N words after the first word, and the last word only includes N words before the first word. This allows the CX_DB8 system to properly compute the meaning of each word in the text **in the context of the N words before and after it**. I then compute a similarity score between each word with context and the card tag, and decide to include it in the summarized text if the similarity score is over a user defined threshhold. If the user gives a 1, then the summarizer only includes the exact same string, if the user gives a 0 it includes everything. I've experimented and found a score of about 0.25 - 0.4 to be very effective
-
-I am strapped for time but will provide a good setup and install script and instructions on how to install and use this. If you know how to code, you should be able to easily get this working on your own system. **it doesn't even require a GPU, since the Universal Sentence Encoder model is CPU friendly** (but you might need Mac or Linux - have not tested Windows support yet and that's a big deal since no one runs word on a Linux box) 
-
-
-
-## What is this? 
-
-So - I'm really passionate about someone using the [various](https://github.com/google-research/bert) [different](https://blog.openai.com/better-language-models/) [new](https://github.com/zalandoresearch/flair) [cool](http://jalammar.github.io/illustrated-transformer/) [innovations](https://github.com/abisee/pointer-generator) that currently exist in NLP to solve a surprisngly well defined problems that (should) have been solved by now: Token-Level Extractive Summarization.
-
-
-
-## Why token level extractive summarization? 
-
-In American competative cross-examination debate (also known as Policy Debate) - a unique form of evidence summarization is utilized - Summarization by highlighting - which this "card" will illustrate: 
-
-![alt_tab](https://github.com/Hellisotherpeople/CX_DB8/blob/master/evidence_example.JPG)
-
-
-
-In this example, everything after the citation is the verbatim supreme court dissenting opinion. Competative debators summarize this document by simply underlining the important parts of the document. They read outloud the highlighed portions of the document. 
-
-There are a multitude of NLP tasks that we could apply to a dataset of thousands of pieces of debate evidence. I am most interested in the task of creating an automatic evidence underlining tool. 
-
-## So.... where is that tool? 
-
-CX_DB8 is above, but this repo also contains some misc code for analyzing debate corpuses
-
-I'm publishing the dataset parsing and creation tools now to prove that I am (to my knowledge) the first one to write a parsing script capable of converting competative debate evidence into CoNNEL 2003 / Seq2Seq friendly data types. In theory, any Seq2Seq or PoS tagging model that accepts one of those formats can utilize this dataset. I will write a quick tutorial on how to gather these dataset files yourself: 
-
-*Step 1: Download all open evidence files from 2013-2017 ( https://openev.debatecoaches.org/ ) and unzip them into a directory
-
-*Step 2: Convert all evidence from docx files to html5 files using pandoc with this command: 
+# Interactive prompt (paste text, Ctrl-D to finish)
+cx-db8 run
 ```
-for f in *.docx; do pandoc "$f" -s -o "${f%.docx}.html5"; done
+
+### Granularity levels
+
+```bash
+# Sentence level (default) — best for most use cases
+cx-db8 run -f card.txt -q "hegemony decline" -g sentence
+
+# Word level — token-level extraction with context windows
+cx-db8 run -f card.txt -q "hegemony decline" -g word
+
+# Paragraph level — coarse-grained extraction
+cx-db8 run -f card.txt -q "hegemony decline" -g paragraph
 ```
-*Step 3: run one of my .py files with python3 to have it parse all the html5 files and it will dump out a file titled "card_data.txt" in the output format specified by the .py file
 
-I will document how to change the file locations at a future time. 
+### Control thresholds
 
+```bash
+# Underline top 30%, highlight top 15%
+cx-db8 run -f card.txt -q "warming" -u 70 -H 85
 
+# Aggressive: only keep top 10%
+cx-db8 run -f card.txt -q "warming" -u 90 -H 95
+```
 
-## What are your plans? 
-So, it looks like the prefered framework for doing state of the art NLP work [Flair](https://github.com/zalandoresearch/flair/issues/563#issuecomment-470010988) is finally being updated to allow it to train with large datasets. This is going to allow me to create a sentence compression (highlighter) model as soon as the patch allowing large datasets makes it into Flair. I will be training this model using the latest in sentence and word pre-trained embeddings (like google BERT) to give the sentence compression model far more semantic understanding. 
+### Export formats
 
-After the sentence compression model is developed (DONE), I have 2 other models I want to create for the good of the debate community. 
+```bash
+# Word document
+cx-db8 run -f card.txt -q "deterrence" --docx summary.docx
 
-1. A document classifier. (also possible using Flair). I will soon write some parsing code to extract the class of a debate card. For instance, an answer to the Capitalism Kritik by saying that there would be tranisition wars would be classified as "A2 Capitalism - Transition Wars". Given the way that debate documents are hierachially structured using verbatims "hats and pockets" features - it should be possible to automatically extract a reasonable class for each document. With some cleaning, I hope to get a document classifier that can classify an arbitrary piece of evidence into 1 of N (I assume N is around 200) buckets. 
+# HTML
+cx-db8 run -f card.txt -q "deterrence" --html summary.html
 
-2. A card tag generator - basically just a abstractive summarizer model. I'd explore Pointer-Generator networks for this, as they are mature and allow for abstractive summaries which utilize lots of words from the source text. 
+# SVG screenshot
+cx-db8 run -f card.txt -q "deterrence" --svg summary.svg
 
-Combing the 3 models, a document highlighter, a document classifier, and a card tag generator with a system to automate taking in new cards (RSS feed or something involving Kafka / REST Apis) - a fully end to end researching system can be created - which will automate away all tasks of debate. 
+# All at once
+cx-db8 run -f card.txt -q "deterrence" --docx out.docx --html out.html --svg out.svg
+```
 
+### Choose a model
+
+```bash
+# List recommended models
+cx-db8 models
+
+# Use a specific model
+cx-db8 run -f card.txt -q "query" --model all-mpnet-base-v2
+```
+
+### Interactive mode
+
+Process multiple cards in a session and save all summaries to a Word document:
+
+```bash
+cx-db8 run --interactive
+```
+
+### 3D Visualization
+
+```bash
+# Install visualization dependencies
+uv pip install cx-db8[viz]
+
+# Run with visualization
+cx-db8 run -f card.txt -q "query" --viz
+```
+
+![Help and Models](assets/help.gif)
+
+## How It Works
+
+CX_DB8 is an **unsupervised extractive summarizer** that works by computing semantic similarity between a query and each unit of text:
+
+1. **Encode the query** into a dense vector using a sentence-transformer model
+2. **Segment the text** into spans (words with context windows, sentences, or paragraphs)
+3. **Encode each span** into the same embedding space
+4. **Score each span** by cosine similarity to the query vector
+5. **Threshold** using percentile-based cutoffs to determine what gets highlighted, underlined, or removed
+
+For **word-level** summarization, each word is embedded along with its surrounding context window (default ±10 words), preserving contextual meaning rather than treating each word in isolation.
+
+### Sentence-Level Summary
+
+<img src="assets/sentence_summary.svg" alt="Sentence-level summary" width="700">
+
+### Word-Level Summary
+
+<img src="assets/word_summary.svg" alt="Word-level summary" width="700">
+
+## Configuration
+
+All settings are available as CLI flags. Run `cx-db8 run --help` for full documentation:
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `-f, --file` | stdin | Input text file |
+| `-q, --query` | interactive | Card tag / query |
+| `-g, --granularity` | sentence | word, sentence, or paragraph |
+| `-u, --underline` | 70 | Underline percentile (1-99) |
+| `-H, --highlight` | 85 | Highlight percentile (1-99) |
+| `-m, --model` | all-MiniLM-L6-v2 | Sentence-transformer model |
+| `-w, --word-window` | 10 | Context window for word-level |
+| `--docx` | — | Export as Word document |
+| `--html` | — | Export as HTML |
+| `--svg` | — | Export as SVG screenshot |
+| `--viz` | false | Show 3D embedding plot |
+| `-i, --interactive` | false | Interactive loop mode |
+
+## Development
+
+```bash
+git clone https://github.com/Hellisotherpeople/CX_DB8.git
+cd CX_DB8
+uv sync --extra dev
+uv run pytest
+```
+
+### Record demo GIFs
+
+Requires [VHS](https://github.com/charmbracelet/vhs):
+
+```bash
+vhs demo.tape
+vhs demo_help.tape
+```
+
+## Background
+
+In American competitive cross-examination debate (Policy Debate), debaters summarize evidence by underlining and highlighting the most important parts of source documents. This manual process is what CX_DB8 automates.
+
+The original version (2018-2019) used TensorFlow Hub's Universal Sentence Encoder and Flair embeddings. This v2.0 rewrite modernizes the stack with sentence-transformers, Rich TUI, and UV packaging while preserving the core algorithm.
+
+A webapp version implementing similar functionality is available at [Hugging Face Spaces](https://huggingface.co/spaces/Hellisotherpeople/Unsupervised_Extractive_Summarization).
+
+## License
+
+MIT
