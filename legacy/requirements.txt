@@ -6,7 +6,7 @@ hyperopt==0.1.2
 tensorflow_gpu==1.14.0
 segtok==1.5.7
 gensim==3.7.3
-pytest==4.6.1
+pytest==9.0.3
 tqdm==4.31.1
 umap_learn==0.3.8
 langdetect==1.0.7
