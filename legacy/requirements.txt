@@ -22,7 +22,7 @@ typing==3.7.4
 sty==1.0.0b11
 numpy==1.16.2
 torch==1.1.0
-requests==2.22.0
+requests==2.33.0
 pandas==0.24.2
 sqlitedict==1.6.0
 mpld3==0.3
